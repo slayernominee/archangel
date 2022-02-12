@@ -11,5 +11,5 @@ It's a lot customizable.
 - Apt Package Manager
 - Pip Installed
 ## Installation
-`git clone https:// && cd archangel && cd archangel`
+`git clone https://github.com/slayernominee/archangel && cd archangel && cd archangel`
 `sudo setup.py`
