@@ -12,4 +12,5 @@ It's a lot customizable.
 - Pip Installed
 ## Installation
 `git clone https://github.com/slayernominee/archangel && cd archangel && cd archangel`
+
 `sudo setup.py`
