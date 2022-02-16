@@ -1,0 +1,123 @@
+<link rel="stylesheet" href="/rsc/css/navigationbar"> 
+
+
+<script>
+    var isforcedvisible = false;
+    function showaccountdropdownmenu() {
+        if (isforcedvisible === false) {
+            e = document.getElementById('accountdropdownmenu')
+            e.style.display = 'block'
+            isforcedvisible = true;
+        } else {
+            e = document.getElementById('accountdropdownmenu')
+            e.style.display = 'none'
+            isforcedvisible = false;
+        }
+        
+    }
+    
+</script>
+
+<ul class='navbar' id="navbar-pc">
+    <li class='navbar'><a class='navbar' href="/home">{% if 'language' in session %}{{info['language']['navbar']['home'][session['language']]['title']}}{% else %}{{info['language']['navbar']['home'][info['defaultlanguage']]['title']}}{% endif %}</a></li>
+    <li class='navbar'><a class='navbar' href="/index">{% if 'language' in session %}{{info['language']['navbar']['index'][session['language']]['title']}}{% else %}{{info['language']['navbar']['index'][info['defaultlanguage']]['title']}}{% endif %}</a></li>
+    <li class='navbar'><a class='navbar' href="/search">{% if 'language' in session %}{{info['language']['navbar']['search'][session['language']]['title']}}{% else %}{{info['language']['navbar']['search'][info['defaultlanguage']]['title']}}{% endif %}</a></li>
+    {% if 'id' in session and session['perms']['admin'] == True%}
+    <!-- Admin Menu -->
+    <li class="dropdown navbar">
+        <a href="javascript:void(0)" class="dropbtn navbar">Admin</a>
+        <div class="dropdown-content navbar resetRight">
+            <a class='navbar' href="/admin">{% if 'language' in session %}{{info['language']['navbar']['admin'][session['language']]['title']}}{% else %}{{info['language']['navbar']['admin'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            <a class='navbar' href="/admin/user">{% if 'language' in session %}{{info['language']['navbar']['admin'][session['language']]['user']}}{% else %}{{info['language']['navbar']['admin'][info['defaultlanguage']]['user']}}{% endif %}</a>
+        </div>
+    </li>
+    
+    {% endif %}
+    {% if 'id' in session and session['perms']['links'] == True%}
+    <li class='navbar'><a class='navbar' href="/stream/add">{% if 'language' in session %}{{info['language']['navbar']['addSeries'][session['language']]['title']}}{% else %}{{info['language']['navbar']['addSeries'][info['defaultlanguage']]['title']}}{% endif %}</a></li>
+    {% endif %}
+
+
+    <li class="dropdown navbar" style='float: right;' onclick="showaccountdropdownmenu();">
+        <a href="javascript:void(0)" class="dropbtn navbar" style='margin: 0; padding: 0;'><img src="{% if 'image' in session and session['image'] != '' %}{{session['image']}}{% else %}/rsc/img/avatar/0{% endif %}"></a>
+        <div class="dropdown-content navbar" id="accountdropdownmenu">
+            {% if 'id' in session %}
+            <a class='navbar' href="/account">{% if 'language' in session %}{{info['language']['navbar']['account'][session['language']]['title']}}{% else %}{{info['language']['navbar']['account'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            <a class='navbar' href="/account/settings">{% if 'language' in session %}{{info['language']['navbar']['settings'][session['language']]['title']}}{% else %}{{info['language']['navbar']['settings'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            <a class='navbar' href="/logout">{% if 'language' in session %}{{info['language']['navbar']['logout'][session['language']]['title']}}{% else %}{{info['language']['navbar']['logout'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            {% else %}
+            <a class='navbar' href="/login">{% if 'language' in session %}{{info['language']['navbar']['login'][session['language']]['title']}}{% else %}{{info['language']['navbar']['login'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            <a class='navbar' href="/register">{% if 'language' in session %}{{info['language']['navbar']['register'][session['language']]['title']}}{% else %}{{info['language']['navbar']['register'][info['defaultlanguage']]['title']}}{% endif %}</a>
+            {% endif %}
+        </div>
+    </li>
+    {% if 'id' in session %}
+    <li class='navbar' style="float: right;"><a class='navbar' style="cursor: pointer;" onclick="switchNotificationMenu();"><i class="fa fa-bell"></i></a></li>
+    {% endif %}
+</ul>
+
+{% if 'id' in session %}
+<div id="notificationmenu" style="display: none;" class="notificationmenu">
+</div>
+<script async>
+    listMenu = document.getElementById('notificationmenu');
+    function switchNotificationMenu() {
+        if (listMenu.style.display === 'none') {
+            listMenu.style.display = 'block';
+        } else {
+            listMenu.style.display = 'none';
+        }
+    }
+
+    function reloadNotificationList() {
+        listMenu.innerHTML = '';
+        $.ajax({
+            type: "POST",
+            url: "/get/notifications_list",
+            success: function(data) {
+                notificationlist = data['notifications'];
+                for (notification in notificationlist) {
+                    title = notificationlist[notification]['title'];
+                    text = notificationlist[notification]['text'];
+                    listMenu.innerHTML += '<li><p><b>' + title + '</b><br>' + text + '</p></li><hr>';
+                }
+                listMenu.innerHTML += '<a href="/notifications"><span style="font-size: x-small; text-align: center;">Show all</span></a>';
+            }
+        });
+    }
+    reloadNotificationList();
+</script>
+{% endif %}
+
+<div id="navbar-mobile" style="display: none;">
+    <ul id="mobile-menu" class="mobile-menu">
+        <li><a href="/home"><i class="fa-solid fa-home"></i></a></li>
+        <li><a href="/index"><i class="fa-solid fa-list"></i></a></li>
+        <li><a href="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+
+        {% if 'id' in session and session['perms']['links'] == True%}
+        <li><a href="/stream/add"><i class="fa-solid fa-plus"></i></a></li>
+        {% endif %}
+
+        <li class="dropdown navbar" style='float: right;' onclick="showaccountdropdownmenu();">
+            <a href="javascript:void(0)" class="dropbtn navbar" style='margin: 0; padding: 0;'><img src="{% if 'image' in session and session['image'] != '' %}{{session['image']}}{% else %}/rsc/img/avatar/0{% endif %}"></a>
+            <div class="dropdown-content navbar" id="accountdropdownmenu">
+                {% if 'id' in session %}
+                <a class='navbar' href="/account">{% if 'language' in session %}{{info['language']['navbar']['account'][session['language']]['title']}}{% else %}{{info['language']['navbar']['account'][info['defaultlanguage']]['title']}}{% endif %}</a>
+                <a class='navbar' href="/account/settings">{% if 'language' in session %}{{info['language']['navbar']['settings'][session['language']]['title']}}{% else %}{{info['language']['navbar']['settings'][info['defaultlanguage']]['title']}}{% endif %}</a>
+                <a class='navbar' href="/logout">{% if 'language' in session %}{{info['language']['navbar']['logout'][session['language']]['title']}}{% else %}{{info['language']['navbar']['logout'][info['defaultlanguage']]['title']}}{% endif %}</a>
+                {% else %}
+                <a class='navbar' href="/login">{% if 'language' in session %}{{info['language']['navbar']['login'][session['language']]['title']}}{% else %}{{info['language']['navbar']['login'][info['defaultlanguage']]['title']}}{% endif %}</a>
+                <a class='navbar' href="/register">{% if 'language' in session %}{{info['language']['navbar']['register'][session['language']]['title']}}{% else %}{{info['language']['navbar']['register'][info['defaultlanguage']]['title']}}{% endif %}</a>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script>
+    if (screen.width < 475) {
+        document.getElementById('navbar-pc').style.display = 'none';
+        document.getElementById('navbar-mobile').style.display = 'block';
+    }
+</script>

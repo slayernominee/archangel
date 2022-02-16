@@ -1,0 +1,115 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<h1>Settings</h1>
+<br>
+
+<div id="settings" style="padding-left: 5vw; padding-right: 5vw;">
+    <div id="profile">
+        <h2>{{info['language']['account']['settings']['profile'][session['language']]['title']}}</h2>
+        <h3>{{info['language']['account']['settings']['profile']['name'][session['language']]['title']}}</h3>
+        <input type="text" id="name" placeholder="{{session['name']}}"><br>
+        <button onclick="change('name', document.getElementById('name').value);">{{info['language']['account']['settings']['profile']['name'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['profile']['description'][session['language']]['title']}}</h3>
+        <textarea id="desc" placeholder="Write something about yourself">{{session['description']}}</textarea><br>
+        <button onclick="change('description', document.getElementById('desc').value);">{{info['language']['account']['settings']['profile']['description'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['profile']['location'][session['language']]['title']}}</h3>
+        <input type="text" id="location" placeholder="{{session['location']}}"><br>
+        <button onclick="change('location', document.getElementById('location').value);">{{info['language']['account']['settings']['profile']['location'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['profile']['birthday'][session['language']]['title']}}</h3>
+        <input type="date" id="birthday" placeholder="{{session['birthday']}}"><br>
+        <button onclick="change('birthday', document.getElementById('birthday').value);">{{info['language']['account']['settings']['profile']['birthday'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['profile']['image'][session['language']]['title']}}</h3>
+        <input type="url" id="image" placeholder="{{session['image']}}"><br>
+        <button onclick="change('image', document.getElementById('image').value);">{{info['language']['account']['settings']['profile']['image'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['profile']['banner'][session['language']]['title']}}</h3>
+        <input type="url" id="banner" placeholder="{{session['banner']}}"><br>
+        <button onclick="change('banner', document.getElementById('banner').value);">{{info['language']['account']['settings']['profile']['banner'][session['language']]['change']}}</button>
+    </div>
+
+    <div id="appereance">
+        <h2>{{info['language']['account']['settings']['appereance'][session['language']]['title']}}</h2>
+        <h3>{{info['language']['account']['settings']['appereance']['language'][session['language']]['title']}}</h3>
+        <button onclick="change('language', 'en');">{{info['language']['account']['settings']['appereance']['language'][session['language']]['en']}}</button>
+        <button onclick="change('language', 'de');">{{info['language']['account']['settings']['appereance']['language'][session['language']]['de']}}</button>
+    </div>
+    
+    <div id="account">
+        <h2>{{info['language']['account']['settings']['account'][session['language']]['title']}}</h2>
+        <h3>{{info['language']['account']['settings']['account']['username'][session['language']]['title']}}</h3>
+        <input id="username" type="text" placeholder="{{session['username']}}"><br>
+        <button onclick="change('username', document.getElementById('username').value);">{{info['language']['account']['settings']['account']['username'][session['language']]['change']}}</button>
+
+        <h3>{{info['language']['account']['settings']['account']['mail'][session['language']]['title']}}</h3>
+        <input id="mail" type="email" placeholder="{{session['mail']}}"><br>
+        <input id="mail-c" type="email" placeholder="Confirm your New Mail"><br>
+        <button onclick="changeMail();">{{info['language']['account']['settings']['account']['mail'][session['language']]['change']}}</button>
+    </div>
+
+    <div id="security">
+        <h2>{{info['language']['account']['settings']['security'][session['language']]['title']}}</h2>
+        <h3>{{info['language']['account']['settings']['security']['password'][session['language']]['title']}}</h3>
+        <p style="display: none; color: red;" id='error-pwd'></p>
+        <input id="password-old" type="text" placeholder="{{info['language']['account']['settings']['security']['password'][session['language']]['yold']}}">
+        <br>
+        <input id="password-new" type="password" minlength="8" placeholder="{{info['language']['account']['settings']['security']['password'][session['language']]['ynew']}}">
+        <br>
+        <input id="password-new-check" type="password" minlength="8" placeholder="{{info['language']['account']['settings']['security']['password'][session['language']]['ynewc']}}">
+        <br>
+        <button onclick="changePassword();">{{info['language']['account']['settings']['security']['password'][session['language']]['change']}}</button>
+        <h3>{{info['language']['account']['settings']['security']['2fa'][session['language']]['title']}}</h3>
+
+    </div>
+</div>
+
+<script>
+    function change(key, value) {
+        $.ajax({
+            type: "POST",
+            url: "/account/settings",
+            data: {
+                value: value,
+                key: key
+            }
+        });
+        checkNotifications();
+    }
+    function changePassword() {
+        newPwd = document.getElementById('password-new');
+        newPwd2 = document.getElementById('password-new-check');
+        oldPwd = document.getElementById('password-old');
+        if (newPwd.value != newPwd2.value) {
+            document.getElementById('error-pwd').style.display = 'block';
+            document.getElementById('error-pwd').innerHTML = '{{info['language']['account']['settings']['security']['password'][session['language']]['notsame']}}'
+        } else if(newPwd.value.length < 8) {
+            document.getElementById('error-pwd').style.display = 'block';
+            document.getElementById('error-pwd').innerHTML = '{{info['language']['account']['settings']['security']['password'][session['language']]['min8']}}'
+        } else if(oldPwd.value.length < 8) {
+            document.getElementById('error-pwd').style.display = 'block';
+            document.getElementById('error-pwd').innerHTML = '{{info['language']['account']['settings']['security']['password'][session['language']]['noold']}}'
+        } else {
+            $.ajax({
+            type: "POST",
+            url: "/account/settings",
+            data: {
+                pwd: newPwd.value,
+                pwd_old: oldPwd.value
+            },
+            success: function(data) {
+                window.location.href = '/login';
+            },
+            error: function(data) {
+                document.getElementById('error-pwd').style.display = 'block';
+                document.getElementById('error-pwd').innerHTML = data;
+            }
+        });
+        }
+        checkNotifications();
+    }
+    function changeMail() {
+        alert('comming soon!');
+        checkNotifications();
+    }
+</script>
+
+{% include 'resources/footer.html' %}

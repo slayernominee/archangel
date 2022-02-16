@@ -1,0 +1,30 @@
+{
+    "en": "/rsc/img/icon/us",
+    "us": "/rsc/img/icon/us",
+    "fr": "/rsc/img/icon/fr",
+    "es": "/rsc/img/icon/es",
+    "br": "/rsc/img/icon/br",
+    "it": "/rsc/img/icon/it",
+    "de": "/rsc/img/icon/de",
+    "jp": "/rsc/img/icon/jp",
+    
+    "jp-de": "/rsc/img/icon/jp-de",
+    "jp-us": "/rsc/img/icon/jp-us",
+    "us-de": "/rsc/img/icon/us-de",
+
+    "english": "/rsc/img/icon/us",
+    "usa": "/rsc/img/icon/us",
+    "french": "/rsc/img/icon/fr",
+    "espaniol": "/rsc/img/icon/es",
+    "brasilian": "/rsc/img/icon/br",
+    "italy": "/rsc/img/icon/it",
+    "german": "/rsc/img/icon/de",
+    "japanese": "/rsc/img/icon/jp",
+    "englisch": "/rsc/img/icon/us",
+    "france": "/rsc/img/icon/fr",
+    "esp": "/rsc/img/icon/es",
+    "italian": "/rsc/img/icon/it",
+    "deutsch": "/rsc/img/icon/de",
+    "ger": "/rsc/img/icon/de",
+    "japan": "/rsc/img/icon/jp"
+}

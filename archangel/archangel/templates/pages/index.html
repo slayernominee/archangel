@@ -1,0 +1,21 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<h1>Index</h1>
+
+<p style="text-align: center;">A list of all available series and the matching links</p><br>
+
+<div id="index">
+    {% for i in series %}
+    <h2>{{i.upper()}}</h2>
+    <div id="index-{{i}}" style="padding: 5px;">
+        {% for serie in series[i] %}
+        <p style="padding-top: 5px;"><a style="text-decoration: none;" href="/stream/{{serie['id']}}">• {% if serie['name'].startswith('-') %}{{serie['name'][1:]}}{% else %}{{serie['name']}}{% endif %}</a></p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% include 'resources/footer.html' %}
