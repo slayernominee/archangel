@@ -13,4 +13,4 @@ It's a lot customizable.
 ## Installation
 `git clone https://github.com/slayernominee/archangel.git && cd archangel && cd archangel`
 
-`sudo setup.py`
+`sudo python3 setup.py`
