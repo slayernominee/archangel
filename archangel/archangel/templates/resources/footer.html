@@ -1,0 +1,58 @@
+<!-- Please don't modify this footer content to support the project and
+gurantee that this project will get futere updates and patches
+and can stay free and public -->
+
+{% autoescape false %}
+<footer id="footer" style="background-color: rgba(20, 20, 20, 0.2); text-align: center; padding: 16px 16px; margin-top: 16px;">
+
+    <h2>{{info['name']}}</h2>
+
+    <div style="display: flex; justify-content: center;">
+        <div class="footer_list">
+            <h3>{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['series']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['series']}}{% endif %}</h3><br>
+            <a href="/home">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['start']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['start']}}{% endif %}</a><br><br>
+            <a href="/index">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['index']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['index']}}{% endif %}</a><br><br>
+            <a href="/home#new-series">New</a>
+        </div>
+        <div class="footer_list">
+            <h3>{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['explore']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['explore']}}{% endif %}</h3><br>
+            <a href="/search">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['search']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['search']}}{% endif %}</a><br><br>
+            <a href="/random">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['random']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['random']}}{% endif %}</a>
+        </div>
+        <div class="footer_list">
+            <h3>{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['about']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['about']}}{% endif %}</h3><br>
+            <a href="/tos">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['tos']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['tos']}}{% endif %}</a><br><br>
+            <a href="/dmca">DMCA</a><br><br>
+            <a href="/about">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['about']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['about']}}{% endif %}</a>
+        </div>
+        <div class="footer_list">
+            <h3>{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['more']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['more']}}{% endif %}</h3><br>
+            <a href="/requests">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['reqs']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['reqs']}}{% endif %}</a><br><br>
+            <a href="/register">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['register']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['register']}}{% endif %}</a>
+        </div>
+    </div>
+
+    <br><br>
+    <p>{{info['aditional_footer_info']}}</p>
+
+    <br>
+    <h3><a href="https://github.com/slayernominee/archangel" style="text-decoration: none; color: white;">{% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['build']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['build']}}{% endif %}</a></h3>
+    <p style="color: white;">
+        {% if 'language' in session %}{{info['language']['footer']['archangel'][session['language']]['support']}}{% else %}{{info['language']['footer']['archangel'][info['defaultlanguage']]['support']}}{% endif %}
+    </p>
+    
+</footer>
+{% endautoescape %}
+
+<style>
+    .footer_list {
+        margin-right: 2vw;
+        margin-left: 2vw;
+        overflow: hidden;
+    }
+    .footer_list a {
+        text-decoration: none;
+    }
+</style>
+
+</html>

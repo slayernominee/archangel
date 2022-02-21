@@ -1,0 +1,19 @@
+{
+  "name": "Arch Angel",
+  "description": "Your Site description for embeds/in search engines and so on",
+  "favicon": "",
+  "logo": "",
+  "public": true,
+  "register": true,
+  "language": "en",
+  "home_index": true,
+  "auto_spotlight": true,
+  "website": "",
+  "discord": "https://discord.gg/UHHkFhFPVv",
+  "patreon": "",
+  "instagram": "",
+  "facebook": "",
+  "twitter": "",
+  
+  "aditional_footer_info": ""
+}

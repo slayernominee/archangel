@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve Arch Angel
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+
+WorkingDirectory=/var/www/archangel
+ExecStart=uwsgi --ini /var/www/archangel/uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target

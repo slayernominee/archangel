@@ -1,0 +1,49 @@
+table {
+    border-collapse: collapse;
+}
+th {
+    font-weight: 200;
+    padding: 4px;
+}
+tr {
+    background-color: var(--background-color);
+}
+tr:nth-child(even) {
+    background-color: var(--background-color-2);
+}
+a th {
+    text-decoration: none;
+}
+
+.listElement {
+    text-decoration: none;
+    text-align: left;
+    padding: 12px 20px;
+    list-style: none;
+    border-radius: 20px;
+    margin: 4px 8px;
+    color: var(--text-color);
+    width: 100%;
+    position: relative;
+}
+
+/* List Entry Style */
+.lent {
+    background-color: var(--overlay-dark-low);
+    border-radius: 15px;
+    padding: 1vh 8vw;
+    margin-top: 1vh;
+    height: 15vh;
+    background-size: contain;
+    overflow: hidden;
+}
+.lent img {
+    border-radius: 15px;
+    height: 100%;
+    float: left;
+    margin-right: 2vw;
+}
+.lent span {
+    font-style: italic;
+    font-weight: lighter;
+}

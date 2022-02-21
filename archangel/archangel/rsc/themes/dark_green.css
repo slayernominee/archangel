@@ -1,0 +1,24 @@
+/* Outdated */
+
+:root {
+    --accent-color: rgb(46, 201, 66);
+    --accent-color-2: rgb(40, 120, 64);
+    --accent-color-2-lighter: rgba(60, 130, 75, 1);
+
+    --background-color: rgba(18, 28, 38, 1);
+    --background-color-2: rgba(28, 38, 48, 1);
+    
+    --stream-box-color: rgba(45, 65, 80, 0.288);
+
+    --text-color: rgba(240, 240, 240, 1);
+
+    --navbar-color: rgba(20, 20, 20, 0.5);
+    --navbar-text-color: var(--text-color);
+    --navbar-hover-color: var(--accent-color);
+
+    --notification-background-color: rgba(20, 20, 20, 0.7);
+
+    --overlay-dark-low: rgba(0, 0, 0, 0.25);
+    --overlay-dark: rgba(20, 20, 20, 0.5);
+    --overlay-dark-x: rgba(20, 20, 20, 0.7);
+}
