@@ -35,6 +35,15 @@ if os.path.isdir('/var/www/archangel'):
             new_config[key] = old_config[key]
         with open('archangel/config.json', 'w') as f:
             json.dump(new_config, f, indent=2)
+    if os.path.isfile('/var/www/archangel/languagereplacements.json'):
+        with open('/var/www/archangel/languagereplacements.json', 'r') as f:
+            old_config = json.load(f)
+        with open('archangel/languagereplacements.json', 'r') as f:
+            new_config = json.load(f)
+        for key in old_config:
+            new_config[key] = old_config[key]
+        with open('archangel/languagereplacements.json', 'w') as f:
+            json.dump(new_config, f, indent=2)
     if os.path.isfile('/var/www/archangel/db/accounts.db'):
         os.rename('/var/www/archangel/db/accounts.db', 'archangel/db/accounts.db')
     if os.path.isfile('/var/www/archangel/db/watch.db'):
