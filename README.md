@@ -11,6 +11,7 @@ It's a lot customizable.
 - Account Selling
 - Ads direct on Arch Angel
 - Mofication of the code (allowed is if you do it through the settings (/admin, ...))
+- Comercial Use
 ### Allowed
 - Non Comercial Use
 - Comercial Use if its not with my code e.g. you earn money when users watch the videos on the site (e.g. youtube monitorisation)
