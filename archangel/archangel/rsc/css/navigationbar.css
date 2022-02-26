@@ -1,0 +1,129 @@
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--navbar-color);
+}
+
+li.navbar {
+    float: left;
+}
+
+li a.navbar, .navbar.dropbtn {
+    display: inline-block;
+    color: var(--navbar-text-color);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover.navbar, .navbar.dropdown:hover .navbar.dropbtn {
+    background-color: var(--navbar-hover-color);
+}
+
+li.dropdown.navbar {
+    display: inline-block;
+}
+
+.dropdown-content.navbar {
+    display: none;
+    position: absolute;
+    background-color: var(--navbar-color);
+    min-width: 8vw;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    right: 8px;
+}
+
+.navbar.dropdown-content a {
+    color: var(--navbar-text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.navbar.dropdown-content a:hover {background-color: var(--navbar-hover-color);}
+
+.navbar.dropdown:hover .navbar.dropdown-content {
+    display: block;
+}
+
+.navbar li a img {
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    margin: 3px;
+    object-fit: cover;
+}
+
+ul.mobile-menu {
+    text-align: left;
+    position: inline-flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.mobile-menu li a img {
+    border-radius: 50%;
+    height: 3vh;
+    width: 3vh;
+    object-fit: cover;
+    margin: 3px;
+}
+
+ul.mobile-menu li {
+    padding: 3vh 4vw;
+    text-decoration: none;
+    text-align: middle;
+    font-size: 2vh;
+    display: inline-block;
+}
+.notificationmenu {
+    background-color: var(--notification-background-color);
+    position: absolute;
+    width: 20vw;
+    right: 7px;
+    z-index: 5;
+    overflow-y: visible;
+    max-height: 40vh;
+}
+.notificationmenu li {
+    list-style: none;
+    padding: 12px 16px;
+}
+.notificationmenu p {
+    margin: 0;
+    font-style: italic;
+}
+.notificationmenu b {
+    text-align: center;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    font-style: normal;
+}
+.notificationmenu hr {
+    padding: 0;
+    margin: 1px 0;
+}
+.notificationmenu h4 {
+    font-size: medium;
+}
+.notificationmenu span {
+    text-align: center;
+    padding-right: 8vw;
+    padding-left: 8vw;
+}
+
+#navbar-pc {
+    display: block;
+}
+#navbar-mobile {
+    display: none;
+}
+.onlyBigScreen {
+    display: block;
+}

@@ -1,0 +1,94 @@
+#top-requests, #all {
+    margin-right: 14vw;
+    margin-left: 14vw;
+    padding-right: 4vw;
+    padding-left: 4vw;
+}
+#top-requests-home {
+    padding-right: 4vw;
+    padding-left: 4vw;
+    cursor: pointer;
+}
+#all {
+    display: flex;
+    flex-wrap: wrap;
+}
+#top-requests li, #all li, #top-requests-home li {
+    list-style: none;
+    display: flex;
+}
+#all li {
+    width: 18vw;
+    margin-right: 2vw;
+}
+.rank {
+    margin-right: 30px;
+}
+.s-name {
+    font-size: 1.4em;
+    font-weight: 400;
+    margin-top: 0;
+    margin-right: 5vw;
+}
+.req-t {
+    font-size: smaller;
+    font-weight: 100;
+}
+.upvote {
+    border-radius: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    width: 10vw;
+}
+
+.upvote:hover {
+    background-color: transparent;
+}
+.votes {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-top: 0;
+    margin-left: 5vw;
+}
+.votes_note {
+    font-size: smaller;
+    font-weight: 100;
+}
+.new-request {
+    text-align: center;
+    padding: 15px 30px;
+    font-size: 1.4em;
+    font-weight: 200;
+}
+.serie_name_request_dialog {
+    font-size: large;
+}
+.trash_button {
+    margin-left: 5vw;
+    background-color: transparent;
+    cursor: pointer;
+}
+.trash_button:hover {
+    background-color: transparent;
+}
+.trash_button i:hover {
+    color: red;
+}
+
+#all li .upvote {
+    width: unset;
+}
+#all li .trash_button {
+    margin-left: 2%;
+}
+#all li .s-name {
+    margin-right: 2%;
+}
+#all li .rank {
+    margin-right: 1%;
+}
+#all li .votes {
+    margin-left: 2%;
+    min-width: 2.1em;
+}

@@ -1,0 +1,123 @@
+#decollapse-button {
+    display: none;
+}
+#collapse-button {
+    float: right;
+    display: block;
+    cursor: pointer;
+}
+#seriesinfo-buttons {
+    position: absolute;
+    bottom: 1vh;
+    right: 15px;
+}
+#edit-info-button {
+    cursor: pointer;
+    float: right;
+    display: block;
+}
+div#image img {
+    height: 330px;
+    width: 220px;
+    object-fit: cover;
+}
+#info {
+    padding: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-top: 2px;
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px var(--overlay-dark);
+}
+
+.watched-button {
+    float: right;
+}
+#series {
+    margin-left: 10%; 
+    margin-right: 10%; 
+    margin-top: 2%;
+    margin-bottom: 2%;
+    text-align: center;
+    padding: 5px;
+    background-color: var(--stream-box-color);
+}
+.languageswitcher {
+    padding: 14px 22px;
+    background-color: var(--accent-color-2);
+    min-width: 16vw;
+    height: 6vh;
+    border-radius: 20px;
+    margin-top: 10px;
+    overflow-y: hidden;
+    position: relative;
+}
+.available_language {
+    width: 5vw;
+    height: 7vh;
+    background-color: transparent;
+    border-radius: 6px;
+    margin-top: 0;
+    padding-top: 0;
+}
+.available_language:hover {
+    background-color: var(--overlay-dark-low);
+}
+.available_language img {
+    width: 100%;
+    height: 80%;
+    margin: 0;
+    padding: 0;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    display: inline-block;
+    vertical-align: middle;
+}
+#player {
+    width: 50vw;
+    height: 50vh;
+}
+.seriesinfo-score {
+    float: right;
+    margin-left: 15px;
+    background-color: var(--background-color-2);
+    width: 15vw;
+    min-width: 200px;
+}
+.seriesinfo-score button {
+    width: 100%;
+    margin: 0;
+}
+#series-more-button {
+    position: absolute;
+    width: 10%;
+    right: 45%;
+    left: 45%;
+    bottom: 0;
+    margin: 0;
+    text-align: center;
+    background-color: transparent;
+}
+#series-less-button {
+    position: absolute;
+    width: 10%;
+    right: 45%;
+    left: 45%;
+    bottom: 0;
+    margin: 0;
+    text-align: center;
+    background-color: transparent;
+    display: none;
+}
+
+
+.age_recommendation {
+    background-color: #4da64d;
+    width: max-content;
+    color: white;
+    padding: 4px 6px;
+    border-radius: 3px;
+    float: right;
+    font-size: small;
+    user-select: none;
+}

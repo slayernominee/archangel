@@ -1,0 +1,7 @@
+pip
+setuptools
+wheel
+requests
+flask
+pyotp
+uwsgi

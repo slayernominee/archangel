@@ -1,0 +1,111 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+{% include 'resources/streaminfo.html' %}
+
+<br>
+<hr>
+<h2 style="text-align: center;">Available Seasons</h2>
+
+<div id="episodes" style="text-align: center;">
+    <table class="episodeList" style="margin-right: 10%; margin-left: 10%;">
+        <tr>
+            <th style="width: min-content;">
+
+            </th>
+            <th style="width: 30vw;">
+                Name
+            </th>
+            <th style="width: 30vw;">
+                Description
+            </th>
+            <th style="width: 30vw;">
+                Score
+            </th>
+            {% if 'perms' in session and session['perms']['links'] == True %}
+            <th style="width: 5vw;">
+                Actions
+            </th>
+            {% endif %}
+        </tr>
+    {% for season in seriesinfo['seasons'] %}
+    <tr>
+        <th>
+            <a style="text-decoration: none;" href="/stream/{{seriesinfo['id']}}/{{season}}"><button>{{season}}</button></a>
+        </th>
+        <th>
+            {{seriesinfo['seasons'][season]['name']}}
+        </th>
+        <th style="font-style: italic; font-weight: lighter;">
+            {{seriesinfo['seasons'][season]['description'][:200]}}
+        </th>
+        <th>
+            Comming Soon
+        </th>
+        {% if 'perms' in session and session['perms']['links'] == True %}
+        <th style="display: flex;">
+            <button onclick="editSeason({{season}});"><i class="fa-solid fa-pencil"></i></button>
+            <button onclick="deleteSeason({{season}});"><i class="fa-solid fa-trash"></i></button>
+        </th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% if 'id' in session and session['perms']['links'] == True %}
+    <tr>
+        <th>
+            <a style="text-decoration: none;" href="/stream/{{seriesinfo['id']}}/add"><button>+</button></a>
+        </th>
+        <th>
+            Add a new Season to this Series
+        </th>
+        <th style="font-style: italic; font-weight: lighter;">
+            Click on the + Button to create a new Season in this Series
+        </th>
+        <th>
+            Not Scored
+        </th>
+    </tr>
+    {% endif %}
+    </table>
+</div>
+
+{% if 'perms' in session and session['perms']['links'] == True %}
+<script>
+    function deleteSeason(season) {
+        if (document.getElementById('delete-season-confirm-' + String(season)) === null) {
+            warning = `<div class="Message Message--orange" id="delete-season-confirm-` + String(season) + `">
+                <div class="Message-icon">
+                    <i class="fa fa-exclamation"></i>
+                </div>
+                <div class="Message-body">
+                    <p>Are you sure you want to delete this Season?</p>
+                    <p class="u-italic">If you click on delete, this cant be undone!</p>
+                    <button class="Message-button" onclick="document.getElementById('delete-season-confirm-` + String(season) + `').style.display = 'none';">Cancel</button>
+                    <button class="Message-button" onclick="finalDeleteSeason(` + season + `);">Delete</button>
+                </div>
+                <button class="Message-close js-messageClose" onclick="document.getElementById('delete-season-confirm-` + String(season) + `').style.display = 'none';"><i class="fa fa-times"></i></button>
+            </div>`
+            messages.innerHTML += warning;
+        } else {
+            document.getElementById('delete-season-confirm-' + String(season)).style.display = 'block';
+        }
+    }
+    function finalDeleteSeason(season) {
+        $.ajax({
+            type: "POST",
+            url: "/stream/{{seriesinfo['id']}}/delete",
+            data: {
+                season: season
+            },
+            success: function(data) {
+                window.location.href = '/stream/{{seriesinfo['id']}}';
+            }
+        })
+    }
+    function editSeason(season) {
+        sendNotification('warning', 'Comming Soon', 'This Feature is coming soon, please contact me if its not there! Then I will put more priority in it!', 5000);
+    }
+</script>
+{% endif %}
+
+{% include 'resources/footer.html' %}
