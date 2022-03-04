@@ -1,0 +1,177 @@
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100px;
+    overflow: hidden;
+    background-color: var(--navbar-color);
+}
+
+li.navbar {
+    height: 100%;
+    float: left;
+}
+
+li a.navbar, .navbar.dropbtn {
+    display: inline-block;
+    color: var(--navbar-text-color);
+    text-align: center;
+    padding: 14px 16px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+li a:hover.navbar, .navbar.dropdown:hover .navbar.dropbtn {
+    color: var(--text-color-darker);
+}
+
+li.dropdown.navbar {
+    display: inline-block;
+}
+
+.dropdown-content.navbar {
+    display: none;
+    position: absolute;
+    background-color: var(--navbar-color);
+    min-width: 8vw;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    right: 5vw;
+}
+
+.logbuttons {
+    float: right;
+}
+.logbuttons button {
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-top: 0;
+    height: 60px;
+    border-radius: 8px;
+    font-weight: 400;
+}
+.logbuttons button:hover {
+    color: var(--text-color-darker);
+}
+
+.navbar.dropdown-content a {
+    color: var(--navbar-text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.navbar.dropdown-content a:hover {
+    color: var(--text-color-darker);
+}
+
+.navbar.dropdown:hover .navbar.dropdown-content {
+    display: block;
+}
+
+.navbar li a img {
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    margin: 3px;
+    object-fit: cover;
+}
+
+.notificationmenu {
+    background-color: var(--notification-background-color);
+    position: absolute;
+    width: 20vw;
+    right: 7px;
+    z-index: 5;
+    overflow-y: visible;
+    max-height: 40vh;
+    user-select: none;
+}
+.notificationmenu li {
+    list-style: none;
+    padding: 12px 16px;
+    user-select: none;
+}
+.notificationmenu p {
+    margin: 0;
+    font-style: italic;
+    user-select: none;
+}
+.notificationmenu b {
+    text-align: center;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    font-style: normal;
+    user-select: none;
+}
+.notificationmenu hr {
+    padding: 0;
+    margin: 1px 0;
+}
+.notificationmenu h4 {
+    font-size: medium;
+}
+.notificationmenu span {
+    text-align: center;
+    padding-right: 8vw;
+    padding-left: 8vw;
+}
+
+#navbar-pc {
+    display: flex;
+}
+#navbar-mobile {
+    display: none;
+}
+.onlyBigScreen {
+    display: block;
+}
+.ym {
+    margin-top: 25px;
+    overflow: hidden;
+}
+#navbar_logo_container {
+    background-color: var(--accent-color-2);
+    height: 100%;
+    width: 30%;
+    margin-right: 2vw;
+}
+#right_block_container {
+    width: 30%;
+    margin-left: 2vw;
+    height: 100%;
+}
+#navbar_logo {
+    background-position: center;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    width: calc(80px * 2);
+    margin-top: 10px;
+    margin-right: 20px;
+    height: 80px;
+    float: right;
+    cursor: pointer;
+    transition: all 100ms ease-in-out;
+}
+#navbar_logo:hover {
+    background-position: center;
+    background-size: 95% !important;
+}
+#usermenu {
+    margin-left: 10px;
+}
+#login-button {
+    background-color: transparent;
+    animation: none;
+}
+#login-button:hover {
+    background-color: transparent;
+    animation: none;
+}
+#accountdropdownmenu {
+    position: absolute;
+    right: unset;
+    left: auto;
+}

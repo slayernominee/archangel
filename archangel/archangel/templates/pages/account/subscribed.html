@@ -1,0 +1,40 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<link rel="stylesheet" href="/rsc/css/subscribed">
+
+<h1>Subscribtions</h1>
+
+<div id="subscribtions" class="subscribtion_list">
+    {% for serie in series %}
+    <a href="/stream/{{serie['id']}}">
+        <li style="background-image: url({{serie['image']}});">
+            <h3>
+                {% if serie['name'].startswith('-') %}
+                {{serie['name'][1:]}}
+                {% else %}
+                {{serie['name']}}
+                {% endif %}
+            </h3>
+        </li>
+    </a>
+    {% endfor %}
+</div>
+
+<script>
+    function unsubscribe(series) {
+        $.ajax({
+            type: "POST",
+            url: "/background/unsubscribe_series",
+            data: {
+                series: series
+            },
+            success: function(data) {
+                window.location.reload();
+            }
+        })
+    }
+</script>
+
+
+{% include 'resources/footer.html' %}

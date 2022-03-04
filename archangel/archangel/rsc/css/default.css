@@ -1,0 +1,155 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+
+* {
+    margin: 0;
+}
+
+.transparent {
+    color: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Display */
+.displaynone {
+    display: none !important;
+}
+.displayblock {
+    display: block !important;
+}
+
+/* Position */
+.resetRight {
+    right: unset !important;
+}
+.resetLeft {
+    left: unset !important;
+}
+.middle {
+    text-align: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    justify-items: middle !important;
+    justify-self: middle !important;
+    align-items: center !important;
+    align-self: center !important;
+}
+.relative {
+    position: relative;
+}
+
+/* Effects */
+.hoverColorNone {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+/* Overlays */
+.overlay_dark {
+    background-color: var(--overlay-dark);
+}
+.overlay_dark_x {
+    background-color: var(--overlay-dark-x);
+}
+.overlay_dark_xx {
+    background-color: var(--overlay-dark-xx);
+}
+.overlay_dark_xxx {
+    background-color: var(--overlay-dark-xxx);
+}
+
+/* Colors */
+.red {
+    background-color: rgb(255, 0, 0);
+}
+.green {
+    background-color: rgb(0, 200, 0);
+}
+.accent {
+    background-color: var(--accent-color);
+}
+.accent2 {
+    background-color: var(--accent-color-2);
+}
+
+/* Text */
+* {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    -webkit-appearance: none;
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 600;
+    margin: 30px;
+}
+h2 {
+    color: var(--text-color);
+    font-weight: 500;
+    margin: 15px;
+}
+h3 {
+    color: var(--text-color);
+    margin: 10px;
+}
+
+p {
+    color: var(--text-color)
+}
+
+/* Non Selectable */
+br, img, video, button, iframe {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--navbar-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+* {
+    overflow-x: hidden;
+}
+
+/* Links */
+a button {
+    cursor: pointer;
+}
+a {
+    cursor: pointer;
+}
+
+/* Hr */
+hr {
+    border-color: var(--accent-color-2);
+}
+
+.margin_rl_1 {
+    margin-right: 1vw;
+    margin-left: 1vw;
+}
+.description {
+    font-size: medium;
+    font-weight: 200;
+    color: #888;
+    overflow-wrap: break-word;
+}
