@@ -1,0 +1,36 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<h1>Data</h1>
+
+<div id="export" style="display: flex; justify-content: center;">
+    <a href="/admin/data/export/accounts.db" download="accounts.db"><button>Export Accounts DB</button></a>
+    <a href="/admin/data/export/stream.db" download="stream.db"><button>Export Stream DB</button></a>
+    <a href="/admin/data/export/watch.db" download="watch.db"><button>Export Watch DB</button></a>
+    <hr>
+    <a href="/admin/data/export/config" download="config.json"><button>Export Config</button></a>
+    <a href="/admin/data/export/spotlight" download="spotlight.json"><button>Export Spotlight Config</button></a>
+    <a href="/admin/data/export/languagereplacements" download="languagereplacements.json"><button>Export Language Replacements</button></a>
+</div>
+
+
+
+<br><br>
+Note: Import doesnt work currently!!!! - If you need this feature, please make an issue on github
+<br><br>
+
+
+
+<br>
+<div id="import" style="display: flex; justify-content: center;">
+    <a><button>Import Accounts DB</button></a>
+    <a><button>Import Stream DB</button></a>
+    <a><button>Import Watch DB</button></a>
+    <hr>
+    <a><button>Import Config</button></a>
+    <a><button>Import Spotlight Config</button></a>
+    <a><button>Import Language Replacements</button></a>
+</div>
+
+
+{% include 'resources/footer.html' %}
