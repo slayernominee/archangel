@@ -33,6 +33,21 @@ div#image img {
 .watched-button {
     float: right;
 }
+.watched-button button {
+    background-color: transparent !important;
+    padding: 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 0;
+}
+.watched-button span {
+    padding: 0;
+    margin-top: 0;
+    font-size: smaller;
+}
+.watched-button button:hover {
+    background-color: transparent !important;
+}
 #series {
     margin-left: 10%; 
     margin-right: 10%; 
@@ -124,6 +139,9 @@ div#image img {
     cursor: pointer;
 }
 
+.img_24px img {
+    width: 24px;
+}
 
 
 
@@ -160,4 +178,15 @@ div#image img {
 #hoster li button {
     position: absolute;
     right: 5px;
+}
+#episode-footer-note {
+    font-size: x-small;
+    font-weight: 100;
+}
+#based-on-votes-note {
+    font-size: x-small;
+}
+.shortdescription {
+    font-size: large;
+    font-style: italic;
 }

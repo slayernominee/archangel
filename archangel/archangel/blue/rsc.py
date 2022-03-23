@@ -1,9 +1,21 @@
-from flask import Blueprint, render_template, abort, send_file
+from flask import Blueprint, render_template, abort, send_file, session
 import os
 import json
 
 rsc = Blueprint('rsc', __name__,
                         template_folder='templates')
+
+with open('language.json', 'rb') as f:
+    lang = json.load(f)
+
+config = 'config.json'
+
+with open(config, 'rb') as f:
+    info = json.load(f)
+
+info['defaultlanguage'] = info['language']
+
+info['language'] = lang
 
 with open('languagereplacements.json', 'r') as f:
     lang_replacements = json.load(f)
@@ -24,8 +36,8 @@ def css(css: str):
 
 @rsc.route('/rsc/js/<js>')
 def js(js: str):
-    if str(js) + '.js' in os.listdir('rsc/js'):
-        return send_file('rsc/js/' + js + '.js')
+    if str(js) + '.js' in os.listdir('templates/rsc/js'):
+        return render_template('rsc/js/' + js + '.js', session=session, info=info)
     else:
         return abort(404)
 
