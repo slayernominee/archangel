@@ -1,0 +1,184 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<link rel="stylesheet" href="/rsc/css/rqs">
+<!-- Overrides -->
+<link rel="stylesheet" href="/rsc/css/rqs_1000" media="screen and (max-width: 1000px)">
+<link rel="stylesheet" href="/rsc/css/rqs_600" media="screen and (max-width: 600px)">
+<link rel="stylesheet" href="/rsc/css/rqs_500" media="screen and (max-width: 500px)">
+
+
+<div class="tree">
+    <a href="/home">Home</a>
+     > 
+    <a href="{% if 'language' in session %}{{info['language']['links']['direct'][session['language']]['requests']}}{% else %}{{info['language']['links']['direct'][info['defaultlanguage']]['requests']}}{% endif %}">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['title']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['title']}}{% endif %}</a>
+</div>
+
+<h1><i class="fa fa-gift"></i> {% if 'language' in session %}{{info['language']['reqs'][session['language']]['title']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['title']}}{% endif %}</h1>
+
+<script src="/rsc/js/timestamp"></script>
+
+<br><br>
+<div id="top-requests">
+    {% for req in range(reqs[:8] | length)%}
+    <li id="request-{{reqs[req]['id']}}">
+        <p class="rank">{{req + 1}}.</p>
+        <h3 class="s-name">{{reqs[req]['name']}}<br><span class="req-t" id="req-{{reqs[req]['id']}}-timestamp">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['req_t']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['req_t']}}{% endif %}</span></h3>
+        <script async defer>
+            t = convertTimestampToLocalDate("{{reqs[req]['requested']}}");
+            tse = document.getElementById("req-{{reqs[req]['id']}}-timestamp");
+            tse.innerHTML = tse.innerHTML.replace('{date}', t);
+        </script>
+        {% if 'id' in session %}
+        {% if reqs[req]['id'] in uvotes %}
+        <button id="downvote-{{reqs[req]['id']}}" onclick="downvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-down fa-3x"></i></button>
+        <button id="upvote-{{reqs[req]['id']}}" style="display: none;" onclick="upvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-up fa-3x"></i></button>
+        {% else %}
+        <button id="downvote-{{reqs[req]['id']}}" style="display: none;" onclick="downvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-down fa-3x"></i></button>
+        <button id="upvote-{{reqs[req]['id']}}" onclick="upvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-up fa-3x"></i></button>
+        {% endif %}
+        {% else %}
+        <button class="upvote needlogin" style="background-color: var(--accent-color-2);">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['login_note']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['login_note']}}{% endif %}</button>
+        {% endif %}
+        <h3 class="votes"><span class="votes_note">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['votes']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['votes']}}{% endif %}</span><br><div id="votes-{{reqs[req]['id']}}" style="text-align: center;">{{reqs[req]['votes']}}</div></h3>
+        {% if 'id' in session and session['perms']['links'] == True %}
+        <button onclick="deleteRequest({{reqs[req]['id']}});" class="trash_button"><i class="fa fa-trash fa-2x"></i></button>
+        {% endif %}
+    </li>
+    {% endfor %}
+    {% if 'id' in session %}
+    <button onclick="newRequest();" class="new-request">New Request</button>
+    {% else %}
+    <button onclick="sendNotification('info', 'Login Required', 'You need to be loged in to create a new request!', 5000);" class="new-request">New Request</button>
+    {% endif %}
+</div>
+
+<br>
+<hr>
+<br>
+
+
+<h2 class="middle">Other Requests</h2>
+<br>
+<div id="all">
+    
+    {% for rq in range(reqs[8:] | length)%}
+    {% set req = rq + 8 %}
+    <li id="request-{{reqs[req]['id']}}">
+        <h3 class="s-name"><span class="rank">{{req + 1}}.</span> {{reqs[req]['name']}}<br><span class="req-t" id="req-{{reqs[req]['id']}}-timestamp">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['req_t']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['req_t']}}{% endif %}</span></h3>
+        <script async defer>
+            t = convertTimestampToLocalDate("{{reqs[req]['requested']}}");
+            tse = document.getElementById("req-{{reqs[req]['id']}}-timestamp");
+            tse.innerHTML = tse.innerHTML.replace('{date}', t);
+        </script>
+        {% if 'id' in session %}
+        {% if reqs[req]['id'] in uvotes %}
+        <button id="downvote-{{reqs[req]['id']}}" onclick="downvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-down fa-3x"></i></button>
+        <button id="upvote-{{reqs[req]['id']}}" style="display: none;" onclick="upvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-up fa-3x"></i></button>
+        {% else %}
+        <button id="downvote-{{reqs[req]['id']}}" style="display: none;" onclick="downvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-down fa-3x"></i></button>
+        <button id="upvote-{{reqs[req]['id']}}" onclick="upvote({{reqs[req]['id']}});" class="upvote"><i class="fa-solid fa-sort-up fa-3x"></i></button>
+        {% endif %}
+        {% else %}
+        <button class="upvote" style="background-color: var(--accent-color-2);">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['login_note']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['login_note']}}{% endif %}</button>
+        {% endif %}
+        <h3 class="votes"><span class="votes_note">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['votes']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['votes']}}{% endif %}</span><br><div id="votes-{{reqs[req]['id']}}" style="text-align: center;">{{reqs[req]['votes']}}</div></h3>
+        {% if 'id' in session and session['perms']['links'] == True %}
+        <button onclick="deleteRequest({{reqs[req]['id']}});" class="trash_button"><i class="fa fa-trash fa-2x"></i></button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</div>
+
+
+{% if 'id' in session %}
+<div id="new-request-dialog" style="position: absolute; width: 100%; height: 200%; display: none; top: 0; left: 0;" class="overlay_dark_xx">
+    <div  style="text-align: center; margin-top: 20vh;">
+        <form method="POST">
+            <h1>New Request</h1>
+            <span style="font-style: italic; font-weight: 100;">Please check before you make a new request if there isnt a request for this series</span>
+            <br><br>
+            <br><br>
+            <br><br>
+            <br><br>
+            
+            <input id="serie_name_request_dialog" required class="serie_name_request_dialog" type="text" placeholder="Series Name" name="name">
+            <br><br>
+            <br><br>
+            <br><br>
+            <br><br>
+            <input class="new-request" type="submit" value="Request">
+        </form>
+    </div>
+</div>
+
+
+<script async>
+    function newRequest() {
+        document.getElementById('new-request-dialog').style.display = 'block';
+        window.location.href = '#new-request-dialog';
+        document.getElementById('serie_name_request_dialog').focus();
+    }
+    function hideNewRequestDialog() {
+        document.getElementById('new-request-dialog').style.display = 'none';
+        window.location.href = '#';
+    }
+    function deleteRequest(req) {
+        $.ajax({
+            type: "POST",
+            url: "/requests",
+            data: {
+                delete: req
+            },
+            success: function(data) {
+                document.getElementById('request-' + req).style.display = 'none';
+            }
+        })
+    }
+    function upvote(req) {
+        $.ajax(
+        {
+            type: "POST",
+            url: "/requests",
+            data: {
+                up: req
+            },
+            success: function(data) {
+                votes = document.getElementById('votes-' + req).innerHTML;
+                votes = parseInt(votes) + 1;
+                document.getElementById('votes-' + req).innerHTML = votes;
+                document.getElementById('upvote-' + req).style.display = 'none';
+                document.getElementById('downvote-' + req).style.display = 'block';
+            }
+        }
+        )
+    }
+    function downvote(req) {
+        $.ajax(
+        {
+            type: "POST",
+            url: "/requests",
+            data: {
+                down: req
+            },
+            success: function(data) {
+                votes = document.getElementById('votes-' + req).innerHTML;
+                votes = parseInt(votes) - 1;
+                document.getElementById('votes-' + req).innerHTML = votes;
+                document.getElementById('downvote-' + req).style.display = 'none';
+                document.getElementById('upvote-' + req).style.display = 'block';
+            }
+        }
+        )
+    }
+    var newrequestdialog = document.getElementById("new-request-dialog");
+    document.addEventListener('keydown', function(e) {
+        let keyCode = e.keyCode;
+        if (keyCode === 27) {
+            newrequestdialog.style.display = 'none';
+        }
+    });
+</script>
+{% endif %}
+
+{% include 'resources/footer.html' %}

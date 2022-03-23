@@ -1,0 +1,118 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<div class="tree tree_full_width">
+    <a href="/home">Home</a>
+     > 
+    <a href="{% if 'language' in session %}{{info['language']['links']['direct'][session['language']]['calendar']}}{% else %}{{info['language']['links']['direct'][info['defaultlanguage']]['calendar']}}{% endif %}">{% if 'language' in session %}{{info['language']['calendar'][session['language']]['title']}}{% else %}{{info['language']['calendar'][info['defaultlanguage']]['title']}}{% endif %}</a>
+</div>
+
+<script>
+    // title
+    document.title = '{{info["name"]}} - {% if 'language' in session %}{{info['language']['calendar'][session['language']]['title']}}{% else %}{{info['language']['calendar'][info['defaultlanguage']]['title']}}{% endif %}'
+</script>
+
+<link rel="stylesheet" href="/rsc/css/calendar">
+<script src="/rsc/js/timestamp"></script>
+
+<h1>{% if 'language' in session %}{{info['language']['calendar'][session['language']]['title']}}{% else %}{{info['language']['calendar'][info['defaultlanguage']]['title']}}{% endif %}</h1>
+
+
+<div id="index">
+</div>
+
+<script>
+    indexe = document.getElementById('index');
+    {% for release in releases %}
+    d = convertTimestampToLocalDate("{{release['time']}}");
+    e = document.getElementById('day_' + String(d));
+    if (e === null) {
+        indexe.innerHTML += '<div id="day_' + String(d) + '" style="padding: 5px;">';
+        indexe.innerHTML += '<h2 class="index_area">' + convertTimestampToWeekDay("{{release['time']}}") + ', ' +  String(d) + '</h2>';
+        indexe.innerHTML += '</div>';
+        indexe.innerHTML += '<div class="index_area_space" id="index_area_space_' + String(d) + '">';
+        indexe.innerHTML += '</div>';
+    }
+    area_space = document.getElementById("index_area_space_" + String(d));
+
+    t = convertTimestampToLocalH_M("{{release['time']}}");
+
+    rev = '<a class="release-date-object" style="text-decoration: none;" href="/stream/{{release['series']}}/{{release['season']}}/{{release['episode']}}">';
+    rev += '<li style="background-image: url(\'{{release['image']}}\');">';
+    rev += '</li>';
+    rev += '<h3><nobr>{{release['seriesname']}}</nobr></h3>';
+    rev += '<p class="darkertext">S{{release['season']}}E{{release['episode']}} <none class="available_language">{{release['language']}}</none> ~' + t + '</p>';
+    rev += '</a>';
+
+    area_space.innerHTML += rev;
+        
+    {% endfor %}
+</script>
+
+<script async defer src="/rsc/languagereplacements"></script>
+
+{% if 'perms' in session and session['perms']['links'] == True %}
+<!-- New Event Button -->
+<div id="addbuttoncontainer" style="position: fixed; bottom: 20px; right: 20px;"></div>
+<div id="addreleasecontainer" style="position: fixed; display: none; top: 0; left: 0; width: 100%; height: 100%;" class="overlay_dark overlay_blur">
+    <div style="text-align: center; margin-top: 10%;">
+        <h1 style="margin-bottom: 5%;">Add Release Deadline</h1>
+        <input type="text" placeholder="Series Name" autofocus required id="add_seriesname"><br>
+        <input type="number" min="1" minlength="1" required id="add_seriesid" placeholder="Series ID"><br>
+        <input type="number" min="0" minlength="1" required id="add_seasonnumber" placeholder="Season Number"><br>
+        <input type="number" min="1" minlength="1" required id="add_episodenumber" placeholder="Episode Number"><br>
+        <input type="text" placeholder="Language" required id="add_language"><br>
+        <br>
+        <input type="date" required id="add_date" placeholder="Date" style="width: 18%; border-right: none !important; margin-right: 0;">
+        <input type="time" required id="add_time" placeholder="Time" style="width: 18%; border-left: none !important; margin-left: 0;">
+        <br>
+        <button onclick="createRelease();">Create</button>
+    </div>
+</div>
+<!-- Script to open form for new release -->
+<script async defer>
+    // The Add Function
+    function newRelease() {
+        // hide add button
+        document.getElementById('addbuttoncontainer').style.display = 'none';
+        document.getElementById('addreleasecontainer').style.display = 'block';
+    }
+    // Add Button -> The Button cant be used before the script is loaded ...
+    document.getElementById('addbuttoncontainer').innerHTML = '<a id="addbutton" onclick="newRelease();"><i class="fa-solid fa-plus fa-5x hoveraccent"></i></a>'
+    function createRelease() {
+        seriesname = document.getElementById('add_seriesname');
+        seriesid = document.getElementById('add_seriesid');
+        seasonnumber = document.getElementById('add_seasonnumber');
+        episodenumber = document.getElementById('add_episodenumber');
+        language = document.getElementById('add_language');
+        date = document.getElementById('add_date');
+        time = document.getElementById('add_time');
+
+        ds = String(date.value) + ' ' + String(time.value) + ''
+
+        var dt = Date.parse(ds);
+
+        ts = parseInt(dt) / 1000;
+
+        $.ajax({
+            type: "POST",
+            url: "/calendar",
+            data: {
+                action: 'new',
+                ts: ts,
+                seriesname: seriesname.value,
+                seriesid: seriesid.value,
+                seasonnumber: seasonnumber.value,
+                episodenumber: episodenumber.value,
+                language: language.value,
+                image: '/stream/' + String(seriesid.value) + '/cover'
+            },
+            success: function(data) {
+                window.location.reload();
+            }
+        })
+    }
+</script>
+{% endif %}
+
+{% include 'resources/footer.html' %}

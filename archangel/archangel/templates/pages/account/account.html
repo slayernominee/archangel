@@ -1,0 +1,52 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<link rel="stylesheet" href="/rsc/css/tags">
+
+<style>
+    #profile {
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),url('{{session['banner']}}');
+        padding: 5px;
+        padding-right: 20px;
+        padding-left: 20px;
+        margin-top: 2px;
+        background-size: cover;
+    }
+    div#image img {
+        height: 300px;
+        width: 300px;
+        object-fit: cover;
+    }
+</style>
+
+<div id="profile" style="position: relative; z-index: 0;">
+    <h1>{{session['name']}}</h1>
+    <div id="image" style="float: left; margin-right: 15px;">
+        <img src="{{session['image']}}" style="overflow: hidden;">
+    </div>
+    <div id="description">
+        <p style="font-size: large; font-style: italic;">
+            {{session['description']}}
+        </p>
+    </div>
+    <div id="tags">
+        <div><li class="tagName">Language: </li><li class="tagName"> {{session['language']}}</li><br></div>
+        <div><li class="tagName">Username: </li><li class="tagName"> {{session['username']}}</li><br></div>
+        <div><li class="tagName">Location: </li><li class="tagName"> {{session['location']}}</li><br></div>
+        <div><li class="tagName">Birthday: </li><li class="tagName"> {{session['birthday']}}</li><br></div>
+        <div><li class="tagName">User ID: </li><li class="tagName"> {{session['id']}}</li></div>
+    </div>
+    <div>
+        <div id="edit-profile-button" style="position: absolute; right: 20px; top: 7px;">
+            <a href="/account/settings"><button>Edit 📝</button></a>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div id="perms">
+    
+</div>
+
+{% include 'resources/footer.html' %}

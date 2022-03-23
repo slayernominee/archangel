@@ -1,0 +1,49 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<h1>Notifications</h1>
+
+<script src="/rsc/js/timestamp"></script>
+
+<div id="notifications">
+    {% for noti in notis%}
+    <li>
+        <h1>{{noti['title']}}</h1>
+        <p class="text">{{noti['text'] | safe}}</p><br>
+
+        <span class="footer">This message was sent <ts id="not-{{noti['id']}}">{{noti['date']}}</ts></span>
+        <script async defer>
+            var ts = document.getElementById('not-{{noti["id"]}}');
+            ts.innerHTML = convertTimestampToLocalTime("{{noti['date']}}");
+        </script>
+    </li>
+    {% endfor %}
+</div>
+
+<style>
+    #notifications {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    #notifications li {
+        background-color: var(--overlay-dark);
+        padding: 8px 18px;
+        margin-top: 4px;
+        list-style: none;
+    }
+    .text {
+        margin-left: 5%;
+        margin-right: 5%;
+        color: var(--text-color-darker);
+    }
+    .footer {
+        margin-left: 5%;
+        margin-right: 5%;
+        color: var(--text-color-darker);
+        font-style: italic;
+        font-weight: 100;
+        font-size: smaller;
+    }
+</style>
+
+{% include 'resources/footer.html' %}
