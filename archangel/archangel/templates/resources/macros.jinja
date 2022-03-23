@@ -1,0 +1,24 @@
+{%- macro getLanguage(path) -%}
+    {#
+     {l} in the path will be replaced by the language
+     info['language'] is not required
+     subpathes should be splittet via /
+     e.g. links/elements/{l}/season
+     {{getLanguage('links/elements/{l}/season')}}
+     #}
+    {%- set ns = namespace(lang=info['language']) -%}  
+    
+    {% if 'language' in session %}
+        {% set path = path.replace('{l}', session['language']) %}
+    {%- else -%}
+        {%- set path = path.replace('{l}', info['defaultlanguage']) -%}  
+    {%- endif -%}
+    {%- for p in path.split('/') -%}
+        {%- if p in ns.lang -%}
+            {%- set ns.lang = ns.lang[p] -%}
+        {%- else -%}}
+            error
+        {%- endif -%}
+    {% endfor %}
+{{ns.lang}}
+{%- endmacro -%}
