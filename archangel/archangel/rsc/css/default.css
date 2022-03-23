@@ -52,6 +52,9 @@
 .overlay_dark_x {
     background-color: var(--overlay-dark-x);
 }
+.overlay_blur {
+    backdrop-filter: blur(6px);
+}
 .overlay_dark_xx {
     background-color: var(--overlay-dark-xx);
 }
@@ -107,6 +110,10 @@ br, img, video, button, iframe {
     -moz-user-select: none;
 }
 
+.darkertext {
+    color: var(--text-color-darker)
+}
+
 
 
 /* Scrollbar */
@@ -152,4 +159,67 @@ hr {
     font-weight: 200;
     color: #888;
     overflow-wrap: break-word;
+}
+
+/* Hover Color */
+.hoverblue:hover {
+    color: blue !important;
+}
+.hovergreen:hover {
+    color: green !important;
+}
+.hoverred:hover {
+    color: red !important;
+}
+.hoveraccent2:hover {
+    color: var(--accent-color-2) !important;
+}
+.hoveraccent:hover {
+    color: var(--accent-color) !important;
+}
+.hoverbgaccent2:hover {
+    background-color: var(--accent-color-2) !important;
+}
+.hoverred, .hovergreen, .hoverblue, .hoveraccent2, .hoveraccent {
+    transition: all 300ms ease-in-out;
+}
+/* Transitions */
+.transition_250 {
+    transition: all 250ms ease-in-out;
+}
+.transition_500 {
+    transition: all 500ms ease-in-out;
+}
+.transition_1000 {
+    transition: all 1000ms ease-in-out;
+}
+
+.hoverbdraccent2 {
+    border: 1px solid transparent;
+}
+.hoverbdraccent2:hover {
+    border: 1px solid var(--accent-color-2) !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+
+/* Tree */
+.tree {
+    padding: 6px 12px;
+    font-size: large;
+    color: var(--text-color-darkest);
+}
+.tree a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 300;
+}
+.tree a:hover {
+    color: var(--text-color-darker);
+}
+.tree_full_width {
+
 }

@@ -82,7 +82,8 @@ li.dropdown.navbar {
 .notificationmenu {
     background-color: var(--notification-background-color);
     position: absolute;
-    width: 20vw;
+    width: 30vw;
+    min-width: 300px;
     right: 7px;
     z-index: 5;
     overflow-y: visible;
@@ -115,8 +116,7 @@ li.dropdown.navbar {
 }
 .notificationmenu span {
     text-align: center;
-    padding-right: 8vw;
-    padding-left: 8vw;
+    font-size: x-small;
 }
 
 #navbar-pc {
@@ -132,16 +132,29 @@ li.dropdown.navbar {
     margin-top: 25px;
     overflow: hidden;
 }
-#navbar_logo_container {
+.navbar_logo_container {
     background-color: var(--accent-color-2);
     height: 100%;
     width: 30%;
     margin-right: 2vw;
 }
-#right_block_container {
-    width: 30%;
+.navbar_middle_container {
+    width: calc(50% - 4vw);
+}
+.navbar_middle_container_login {
+    width: calc(30% - 4vw);
+}
+.right_block_container_login {
+    width: 40%;
     margin-left: 2vw;
     height: 100%;
+    overflow: hidden;
+}
+.right_block_container {
+    width: 20%;
+    margin-left: 2vw;
+    height: 100%;
+    overflow: hidden;
 }
 #navbar_logo {
     background-position: center;
@@ -172,6 +185,5 @@ li.dropdown.navbar {
 }
 #accountdropdownmenu {
     position: absolute;
-    right: unset;
-    left: auto;
+    right: 10%;
 }

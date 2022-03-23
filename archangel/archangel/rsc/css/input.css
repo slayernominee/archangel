@@ -37,7 +37,7 @@ button {
     cursor: pointer;
 }
 
-input[type=text], input[type=number], input[type=email], input[type=password], input[type=url], input[type=date], textarea, select {
+input[type=text], input[type=number], input[type=email], input[type=password], input[type=url], input[type=date], input[type=datetime], input[type=time], textarea, select {
     border: 2px solid black;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -117,4 +117,41 @@ input[type=search] {
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+
+/* Spin Up Button Number Input Hide */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+
+/* Login Input */
+.loginInput {
+    width: 200px;
+    min-width: 40%;
+    text-align: center;
+    line-height: 30px;
+    font-size: large;
+    user-select: none;
+    border: 0.5px var(--text-color-darker) solid !important;
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+}
+.loginButton {
+    width: 160px;
+    height: 40px;
+    border-radius: 4px;
+}
+.smallsearch {
+    max-width: 90vw;
+    max-width: 400px;
+    min-width: 10vw;
+    line-height: 30px !important;
+    font-size: 25px !important;
+    border-bottom-width: 1px !important;
+    margin: 0 !important;
+    padding: 0;
 }

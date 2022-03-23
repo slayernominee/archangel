@@ -47,3 +47,42 @@ a th {
     font-style: italic;
     font-weight: lighter;
 }
+
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    width: calc(72vw + 7 * 4px);
+    margin-left: calc((100vw - (72vw + 7 * 4px)) / 2);
+}
+.calendar_day {
+    background-color: var(--background-color-3);
+    width: 10vw;
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-bottom: 8px;
+    min-height: 200px;
+    max-height: 40vh;
+}
+.calendar_day h3 {
+    text-align: center;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 8px 8px;
+    background-color: var(--background-color-3);
+    border-bottom: 1px solid var(--text-color-darker);
+}
+.calendar_day li {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    list-style: none;
+}
+.calendar_day li none img {
+    width: 18px;
+}
+.calendar_today {
+    background-color: var(--calendar_today) !important;
+}
