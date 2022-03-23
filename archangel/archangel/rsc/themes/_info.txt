@@ -1,0 +1,3 @@
+- > dark.css is the main theme
+-> All new Settings etc will be in this theme
+-> The other themes can be submited by users to me and I maybe add them if they look good

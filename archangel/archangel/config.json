@@ -1,0 +1,54 @@
+{
+  "_name": "title of the page",
+  "name": "Arch Angel",
+
+  "_domain": "used for sitemap",
+  "domain": "http://127.0.0.1:8080",
+
+  "_description": "Description of the Site",
+  "description": "Your Site description for embeds/in search engines and so on",
+
+  "_favicon": "icon of the site",
+  "favicon": "",
+
+  "_logo": "logo of the site (also in navbar)",
+  "logo": "/rsc/img/icon/archangel",
+
+  "_public": "Settings what should be public",
+  "public": true,
+  "public_stream_series": true,
+  "public_index": true,
+  "public_search": true,
+  "public_home": true,
+
+  "_register": "If you want to allow registering",
+  "register": true,
+
+  "_language": "default language of the site",
+  "language": "en",
+
+  "_home": "Settings for the Home Page",
+  "home_index": true,
+  "auto_spotlight": true,
+
+  "_links": "Your Links under the stream player",
+  "website": "",
+  "discord": "https://discord.gg/UHHkFhFPVv",
+  "patreon": "",
+  "instagram": "",
+  "facebook": "",
+  "twitter": "",
+  
+  "_additional_footer_info": "additional footer info e.g. copyright etc",
+  "aditional_footer_info": "",
+
+  "_theme_color": "Your Theme Color, for phones and for embeds",
+  "theme_color": "#282878",
+
+  "_verification_mail": "for register | need a valid mail configuration for the verification mail",
+  "_verification_mail_tutorial": "recommended is a new mail only for archangel | recommended is outlook as provider because gmail makes trouble ...",
+  "verification_mail_mail": "",
+  "verification_mail_password": "",
+  "verification_mail_port": "587",
+  "verification_mail_server": "smtp.outlook.com"
+}

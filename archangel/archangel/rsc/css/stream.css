@@ -1,0 +1,192 @@
+#decollapse-button {
+    display: none;
+}
+#collapse-button {
+    float: right;
+    display: block;
+    cursor: pointer;
+}
+#seriesinfo-buttons {
+    position: absolute;
+    bottom: 1vh;
+    right: 15px;
+}
+#edit-info-button {
+    cursor: pointer;
+    float: right;
+    display: block;
+}
+div#image img {
+    height: 330px;
+    width: 220px;
+    object-fit: cover;
+}
+#info {
+    padding: 5px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-top: 0;
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px var(--overlay-dark);
+}
+
+.watched-button {
+    float: right;
+}
+.watched-button button {
+    background-color: transparent !important;
+    padding: 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 0;
+}
+.watched-button span {
+    padding: 0;
+    margin-top: 0;
+    font-size: smaller;
+}
+.watched-button button:hover {
+    background-color: transparent !important;
+}
+#series {
+    margin-left: 10%; 
+    margin-right: 10%; 
+    margin-top: 2%;
+    margin-bottom: 2%;
+    text-align: center;
+    padding: 5px;
+    background-color: var(--stream-box-color);
+}
+.languageswitcher {
+    padding: 14px 22px;
+    background-color: var(--accent-color-2);
+    min-width: 16vw;
+    height: 6vh;
+    border-radius: 20px;
+    margin-top: 10px;
+    overflow-y: hidden;
+    position: relative;
+}
+.available_language {
+    width: 5vw;
+    height: 7vh;
+    background-color: transparent;
+    border-radius: 6px;
+    margin-top: 0;
+    padding-top: 0;
+}
+.available_language:hover {
+    background-color: var(--overlay-dark-low);
+}
+.available_language img {
+    width: 100%;
+    height: 80%;
+    margin: 0;
+    padding: 0;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    display: inline-block;
+    vertical-align: middle;
+}
+#player {
+    width: 50vw;
+    height: 50vh;
+}
+.seriesinfo-score {
+    float: right;
+    margin-left: 15px;
+    background-color: var(--background-color-2);
+    width: 15vw;
+    min-width: 200px;
+}
+.seriesinfo-score button {
+    width: 100%;
+    margin: 0;
+}
+#series-more-button {
+    position: absolute;
+    width: 10%;
+    right: 45%;
+    left: 45%;
+    bottom: 0;
+    margin: 0;
+    text-align: center;
+    background-color: transparent;
+}
+#series-more-button:hover, #series-less-button:hover {
+    background-color: transparent !important;
+}
+#series-less-button {
+    position: absolute;
+    width: 10%;
+    right: 45%;
+    left: 45%;
+    bottom: 0;
+    margin: 0;
+    text-align: center;
+    background-color: transparent;
+    display: none;
+}
+.age_recommendation {
+    background-color: #4da64d;
+    width: max-content;
+    color: white;
+    padding: 4px 6px;
+    border-radius: 3px;
+    float: right;
+    font-size: small;
+    user-select: none;
+    cursor: pointer;
+}
+
+.img_24px img {
+    width: 24px;
+}
+
+
+
+#hoster {
+    margin: 8px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+#hoster li {
+    list-style: none;
+    display: flex;
+    width: 250px;
+    height: 40px;
+    padding: 3px 5px;
+    text-align: left;
+    border-radius: 4px;
+    border: 2px solid var(--accent-color-2);
+    position: relative;
+    line-height: 40px;
+    font-weight: 200;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 3px;
+}
+#hoster li img {
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+    border: 0;
+    margin-right: 5px;
+}
+#hoster li button {
+    position: absolute;
+    right: 5px;
+}
+#episode-footer-note {
+    font-size: x-small;
+    font-weight: 100;
+}
+#based-on-votes-note {
+    font-size: x-small;
+}
+.shortdescription {
+    font-size: large;
+    font-style: italic;
+}

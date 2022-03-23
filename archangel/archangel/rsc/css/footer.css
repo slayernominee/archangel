@@ -1,0 +1,38 @@
+#footer {
+    background-color: rgba(20, 20, 20, 0.2);
+    text-align: center;
+    padding: 16px 16px;
+    margin-top: 16px;
+    user-select: none;
+}
+.footer_settings_block {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#footer-theme-settings, #footer-theme-settings {
+    display: flex;
+    justify-content: center;
+}
+#footer-settings, #footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.themeSwitcher {
+    border-radius: 2px;
+    margin-right: 6px;
+    margin-left: 6px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    background-position: center;
+    background-size: cover;
+}
+.footer_list {
+    margin-right: 2vw;
+    margin-left: 2vw;
+    overflow: hidden;
+}
+.footer_list a {
+    text-decoration: none;
+}
