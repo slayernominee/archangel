@@ -1,1 +1,0 @@
-stream.db | ALTER TABLE series ADD COLUMN status text;
