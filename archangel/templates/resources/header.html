@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html id="html" lang="{% if 'language' in session %}{{session['language']}}{% else %}{{info['defaultlanguage']}}{% endif %}">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<meta name="robots" content="all">
+
+<meta name="keyword" content="stream, serie, archangel, {{info['name']}}, {{info['defaultlanguage']}}">
+<meta name="theme-color" content="{{info['theme_color']}}">
+
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:locale:alternate" content="jp_JP">
+
+
+<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{{info['favicon']}}">
+<link rel="apple-touch-icon" type="image/png" href="{{info['favicon']}}">
+<link rel="icon" href="{{info['favicon']}}">
+
+<!-- Theme -->
+{% if 'theme' in session %}
+<link rel="stylesheet" href="/rsc/theme/{{session['theme']}}">
+{% else %}
+<link rel="stylesheet" href="/rsc/theme/default">
+{% endif %}
+
+<!-- CSS Files -->
+<link rel="stylesheet" href="/rsc/css/default">
+<link rel="stylesheet" href="/rsc/css/colors">
+<link rel="stylesheet" href="/rsc/css/design">
+<link rel="stylesheet" href="/rsc/css/input">
+<link rel="stylesheet" href="/rsc/css/flair">
+<!-- Overrides smaller -->
+<link rel="stylesheet" href="/rsc/css/input_600" media="screen and (max-width: 600px)">
+<!-- Overrides bigger -->
+<link rel="stylesheet" media="screen and (min-width: 3500px) and (min-height: 2000px)" href="/rsc/css/default_3500x2000">
+<link rel="stylesheet" media="screen and (min-width: 3500px) and (min-height: 2000px)" href="/rsc/css/input_3500x2000">
+
+<!-- Default JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/rsc/js/notifications"></script>
+
+{% include 'resources/messages.html' %}
+

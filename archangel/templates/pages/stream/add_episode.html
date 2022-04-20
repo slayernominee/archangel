@@ -1,0 +1,35 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Add Episode</title>
+<meta property="og:title" content="{{info['name']}} • Add Episode">
+<meta property="twitter:title" content="{{info['name']}} • Add Episode">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<div id="add_episode" style="text-align: center;">
+    <form method="POST">
+        <input required name="number" type="number" min=1 placeholder="Episode Number in the Season" value=1>
+        <br>
+        <input required name="language" type="text" placeholder="The language of the video">
+        <br>
+        <br>
+        <input name="name" type="text" placeholder="Episode Name (Leave blank if you wish that the episode number will be the title)">
+        <br>
+        <textarea name="description" placeholder="A description for this Episode (its optinal)"></textarea>
+        <br>
+        <br>
+        <input name="hoster" type="text" placeholder="The Hoster Name for the Link">
+        <br>
+        <input required name="link" type="text" placeholder="The Streaming Link">
+        <br>
+        <input type="submit">
+    </form>
+</div>
+
+{% include 'resources/footer.html' %}

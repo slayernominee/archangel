@@ -1,0 +1,56 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+{% from "resources/macros.jinja" import getLanguage with context %}
+
+<title>{{info['name']}} • Admin - Data</title>
+<meta property="og:title" content="{{info['name']}} • Admin - Data">
+<meta property="twitter:title" content="{{info['name']}} • Admin - Data">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<div class="tree tree_full_width">
+    <a href="/home">Home</a>
+     > 
+    <a href="/admin">Admin</a>
+    > 
+    <a href="/admin/data">Data</a>
+</div>
+
+<h1>Data</h1>
+
+<div id="export" style="display: flex; justify-content: center;">
+    <a href="/admin/data/export/accounts.db" download="accounts.db"><button>Export Accounts DB</button></a>
+    <a href="/admin/data/export/stream.db" download="stream.db"><button>Export Stream DB</button></a>
+    <a href="/admin/data/export/watch.db" download="watch.db"><button>Export Watch DB</button></a>
+    <hr>
+    <a href="/admin/data/export/config" download="config.json"><button>Export Config</button></a>
+    <a href="/admin/data/export/spotlight" download="spotlight.json"><button>Export Spotlight Config</button></a>
+    <a href="/admin/data/export/languagereplacements" download="languagereplacements.json"><button>Export Language Replacements</button></a>
+</div>
+
+
+
+<br><br>
+Note: Import doesnt work currently!!!! - If you need this feature, please make an issue on github
+<br><br>
+
+
+
+<br>
+<div id="import" style="display: flex; justify-content: center;">
+    <a><button>Import Accounts DB</button></a>
+    <a><button>Import Stream DB</button></a>
+    <a><button>Import Watch DB</button></a>
+    <hr>
+    <a><button>Import Config</button></a>
+    <a><button>Import Spotlight Config</button></a>
+    <a><button>Import Language Replacements</button></a>
+</div>
+
+
+{% include 'resources/footer.html' %}

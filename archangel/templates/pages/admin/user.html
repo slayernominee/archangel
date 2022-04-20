@@ -1,0 +1,106 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+{% from "resources/macros.jinja" import getLanguage with context %}
+
+<title>{{info['name']}} • Admin - Users</title>
+<meta property="og:title" content="{{info['name']}} • Admin - Users">
+<meta property="twitter:title" content="{{info['name']}} • Admin - Users">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<div class="tree tree_full_width">
+    <a href="/home">Home</a>
+     > 
+    <a href="/admin">Admin</a>
+    > 
+    <a href="/admin/user">User</a>
+</div>
+
+<script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link rel="stylesheet" href="/rsc/css/table">
+
+<h1>User Managment</h1>
+
+<div style="text-align: center; margin-bottom: 10px;">
+<button onclick="window.location.href = '/admin/user/add'">Add User</button>
+</div>
+
+<table style="width: 100%;">
+    <tr>
+        <th style="width: 5%;">
+            
+        </th>
+        <th style="width: 5%;">
+            ID
+        </th>
+        <th style="width: 15%;">
+            Username
+        </th>
+        <th style="width: 15%;">
+            Mail
+        </th>
+        <th style="width: 15%;">
+            Name
+        </th>
+        <th style="width: 15%;">
+            Description
+        </th>
+        <th style="width: 15%;">
+            Permissions
+        </th>
+        <th style="width: 15%;">
+            Flairs
+        </th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <th style="width: 5%;">
+            <a href=""><img src="{% if user.image != '' %}{{user.image}}{% else %}/rsc/img/avatar/0{% endif %}" style='border-radius: 50%; height: 38px; width: 38px; margin: 3px;'></a>
+        </th>
+        <th style="width: 5%;">
+            {{user.id}}
+        </th>
+        <th style="width: 15%;">
+            {{user.username}}
+        </th>
+        <th style="width: 15%;">
+            {{user.mail}}
+        </th>
+        <th style="width: 15%;">
+            {{user.name}}
+        </th>
+        <th style="width: 15%; font-style: italic; font-weight: 100;">
+            {{user.description}}
+        </th>
+        <th style="width: 15%;">
+            {% if user.perms.admin == True %}
+            Administrator
+            {% elif user.perms.links == True %}
+            Links
+            {% else %}
+            None
+            {% endif %}
+        </th>
+        <th style="width: 15%;">
+            {% if user.flairs | length == 0 %}
+            No Flairs
+            {% else %}
+            <flair style="background-color: {{user.flairs[0]['color']}};">✓{{user.flairs[0]['name']}}</flair>
+            {% endif %}
+        </th>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<div style="text-align: center;">
+    <button onclick="window.location.href='/admin/user?id={{id - 20}}'">« Previous Page</button>
+    <button onclick="window.location.href='/admin/user?id={{id + 20}}'">Next Page »</button>
+</div>
+
+{% include 'resources/footer.html' %}
