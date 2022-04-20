@@ -1,0 +1,61 @@
+/* BG */
+.blue {
+    background-color: blue;
+}
+.red {
+    background-color: rgb(255, 0, 0);
+}
+.green {
+    background-color: green;
+}
+.orange {
+    background-color: darkorange;
+}
+.accent {
+    background-color: var(--accent-color);
+}
+.accent2 {
+    background-color: var(--accent-color-2);
+}
+.yellow {
+    color: yellow;
+}
+
+/* Hover: Text */
+.hoverblue:hover {
+    color: blue !important;
+}
+.hovergreen:hover {
+    color: green !important;
+}
+.hoverred:hover {
+    color: red !important;
+}
+.hoveraccent2:hover {
+    color: var(--accent-color-2) !important;
+}
+.hoveraccent:hover {
+    color: var(--accent-color) !important;
+}
+.hoveryellow:hover {
+    color: yellow;
+}
+
+/* Hover: BG */
+.hovergreenbg:hover {
+    background-color: green !important;
+}
+.hoverredbg:hover {
+    background-color: red !important;
+}
+.hoverorangebg:hover {
+    background-color: orange !important;
+}
+.hoverbgaccent2:hover {
+    background-color: var(--accent-color-2) !important;
+}
+
+/* Transition */
+.hoverred, .hovergreen, .hoverblue, .hoveraccent2, .hoveraccent, .hoverredbg, .hovergreenbg, .hoverorangebg {
+    transition: all 300ms ease-in-out;
+}

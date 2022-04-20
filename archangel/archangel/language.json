@@ -185,7 +185,7 @@
         "archangel": {
             "en": {
                 "support": "",
-                "build": "Build with Arch Angel 0.8",
+                "build": "Build with Arch Angel 0.9",
                 "repository": "",
                 "addinfo": "",
                 "addinfoinfo": "",
@@ -200,11 +200,12 @@
                 "reqs": "Series Requests",
                 "start": "Start",
                 "index": "Index",
-                "calendar": "Calendar"
+                "calendar": "Calendar",
+                "api": "API"
             },
             "jp": {
                 "support": "",
-                "build": "で構築する Arch Angel 0.8",
+                "build": "で構築する Arch Angel 0.9",
                 "repository": "",
                 "addinfo": "",
                 "addinfoinfo": "",
@@ -219,11 +220,12 @@
                 "reqs": "シリーズ要望",
                 "start": "スタート",
                 "index": "目次",
-                "calendar": "カレンダー"
+                "calendar": "カレンダー",
+                "api": "API"
             },
             "de": {
                 "support": "",
-                "build": "Build with Arch Angel 0.8",
+                "build": "Build with Arch Angel 0.9",
                 "repository": "",
                 "addinfo": "",
                 "addinfoinfo": "",
@@ -238,12 +240,19 @@
                 "reqs": "Serien Wünsche",
                 "start": "Start",
                 "index": "Index",
-                "calendar": "Kalendar"
+                "calendar": "Kalender",
+                "api": "API"
             }
         }
     },
     "account": {
+        "en": "Account",
+        "jp": "Account",
+        "de": "Account",
         "settings": {
+            "en": "Settings",
+            "jp": "Settings",
+            "de": "Einstellungen",
             "appereance": {
                 "en": {
                     "title": "Appereance"
@@ -517,6 +526,20 @@
                 "title": "Eingelogt",
                 "text": "Wilkommen zurück {name}!"
             }
+        },
+        "loginrequired": {
+            "en": {
+                "title": "Login Required",
+                "text": "You need to be logged in to access this feature"
+            },
+            "jp": {
+                "title": "Login Required",
+                "text": "You need to be logged in to access this feature"
+            },
+            "de": {
+                "title": "Login Benötigt",
+                "text": "Du musst eingeloggt sein um dieses Feature nutzen zu können"
+            }
         }
     },
     "stream": {
@@ -539,7 +562,8 @@
                 "staff": "Staff",
                 "studio": "Studio",
                 "country": "Country",
-                "alternative": "Names"
+                "alternative": "Names",
+                "status": "Status"
             },
             "jp": {
                 "no_desc": "シンフォシスの提供はありません",
@@ -548,7 +572,8 @@
                 "staff": "スタッフ",
                 "studio": "スタジオ",
                 "country": "国名",
-                "alternative": "名称"
+                "alternative": "名称",
+                "status": "Status"
             },
             "de": {
                 "no_desc": "Keine Beschreibung vorhanden",
@@ -557,7 +582,8 @@
                 "staff": "Mitwirkende",
                 "studio": "Studio",
                 "country": "Land",
-                "alternative": "Namen"
+                "alternative": "Namen",
+                "status": "Status"
             }
         },
         "info_box": {
@@ -590,17 +616,20 @@
             "en": {
                 "series": "Series",
                 "season": "Season ",
-                "episode": "Episode "
+                "episode": "Episode ",
+                "of": "-"
             },
             "jp": {
                 "series": "Series",
                 "season": "Season ",
-                "episode": "Episode "
+                "episode": "Episode ",
+                "of": "-"
             },
             "de": {
                 "series": "Serien",
                 "season": "Staffel ",
-                "episode": "Episode "
+                "episode": "Episode ",
+                "of": "von"
             }
         }
     },
@@ -704,7 +733,7 @@
             "title": "カレンダー"
         },
         "de": {
-            "title": "Kalendar"
+            "title": "Kalender"
         }
     },
     "timestamp": {
@@ -741,17 +770,20 @@
             "en": {
                 "calendar": "calendar",
                 "tos": "tos",
-                "requests": "requests"
+                "requests": "requests",
+                "settings": "settings"
             },
             "de": {
                 "calendar": "kalendar",
                 "tos": "agb",
-                "requests": "anfragen"
+                "requests": "anfragen",
+                "settings": "settings"
             },
             "jp": {
                 "calendar": "calendar",
                 "tos": "tos",
-                "requests": "requests"
+                "requests": "requests",
+                "settings": "settings"
             }
         },
         "elements": {
@@ -766,6 +798,41 @@
             "jp": {
                 "season": "season-",
                 "episode": "episode-"
+            }
+        }
+    },
+    "lists": {
+        "subscribed": {
+            "en": {
+                "title": "Subscribtions"
+            },
+            "jp": {
+                "title": "Subscribtions"
+            },
+            "de": {
+                "title": "Abos"
+            }
+        },
+        "watchlist": {
+            "en": {
+
+            },
+            "jp": {
+
+            },
+            "de": {
+                
+            }
+        },
+        "history": {
+            "en": {
+
+            },
+            "jp": {
+
+            },
+            "de": {
+                
             }
         }
     }

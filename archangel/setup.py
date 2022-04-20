@@ -39,6 +39,9 @@ if os.path.isdir('/var/www/archangel'):
             new_config[key] = old_config[key]
         with open('archangel/config.json', 'w') as f:
             json.dump(new_config, f, indent=2)
+    # Api Tokens Override if not exists
+    if os.path.isfile('/var/www/archangel/api_tokens.json'):
+        os.rename('/var/www/archangel/api_tokens.json', 'archangel/api_tokens.json')
     # Save Language Replacements Rules that exists
     if os.path.isfile('/var/www/archangel/languagereplacements.json'):
         with open('/var/www/archangel/languagereplacements.json', 'r') as f:
