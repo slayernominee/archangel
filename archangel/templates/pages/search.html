@@ -1,0 +1,108 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Search</title>
+<meta property="og:title" content="{{info['name']}} • Search">
+<meta property="twitter:title" content="{{info['name']}} • Search">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<link rel="stylesheet" href="/rsc/css/tags">
+<link rel="stylesheet" href="/rsc/css/table">
+<link rel="stylesheet" href="/rsc/css/search">
+<!-- Overrides -->
+<link rel="stylesheet" href="/rsc/css/search_600" media="screen and (max-width: 600px)">
+
+<script src="/rsc/js/parameter"></script>
+
+<h1>{% if 'language' in session %}{{info['language']['search'][session['language']]['title']}}{% else %}{{info['language']['search'][info['defaultlanguage']]['title']}}{% endif %}</h1>
+<div id="search-line">
+  <input type="search" id="search" autofocus name="q" onkeyup="searchQuery();" placeholder="{% if 'language' in session %}{{info['language']['search'][session['language']]['type_to_search']}}{% else %}{{info['language']['search'][info['defaultlanguage']]['type_to_search']}}{% endif %} ...">
+  <div id="filter">
+    Filter: 
+    <select name="status" id="status-filter" class="search-filter" onchange="searchQuery();">
+      <option value="Any">- Status -</option>
+      <option value="Not Yet Airing">Not Yet Airing</option>
+      <option value="Airing">Airing</option>
+      <option value="Paused">Paused</option>
+      <option value="Finished">Finished</option>
+      <option value="Canceled">Canceled</option>
+    </select>
+    <select name="country" id="country-filter" class="search-filter" onchange="searchQuery();">
+      <option value="Any">- Country -</option>
+      {% for country in allcountrys %}
+      <option value="{{country}}">{{country}}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+<br>
+<h2 id="searching_for"></h2>
+
+<div id="results">
+  
+</div>
+
+<script>
+  query = findGetParameter('q');
+  search = document.getElementById('search');
+  if (query !== null) {
+    search.value = query.replace('+', ' ');
+  }
+  status = findGetParameter('status')
+  status_filter = document.getElementById('status-filter');
+  if (status !== null) {
+    status_filter.value = status;
+  }
+  country = findGetParameter('country')
+  country_filter = document.getElementById('country-filter');
+  if (country !== null) {
+    country_filter.value = country;
+  }
+</script>
+
+<script>
+  function searchQuery() {
+    search = document.getElementById('search');
+    query = search.value.toLowerCase();
+    result = document.getElementById('results');
+    if (query === '') {
+      result.innerHTML = '';
+      document.getElementById('searching_for').innerHTML = '{% if 'language' in session %}{{info['language']['search'][session['language']]['type_to_search']}}{% else %}{{info['language']['search'][info['defaultlanguage']]['type_to_search']}}{% endif %}';
+      return;
+    }
+    document.getElementById('searching_for').innerHTML = '{% if 'language' in session %}{{info['language']['search'][session['language']]['search_results_for']}}{% else %}{{info['language']['search'][info['defaultlanguage']]['search_results_for']}}{% endif %} "<b>' + query + '</b>"';
+    
+    countryfilter = document.getElementById('country-filter').value;
+    statusfilter = document.getElementById('status-filter').value;
+
+    $.ajax({
+      type: "POST",
+      url: "/search",
+      data: {
+        query: query,
+        countryfilter: countryfilter,
+        statusfilter: statusfilter
+      },
+      success: function(data) {
+        result.innerHTML = data;
+      },
+      error: function(data) {
+        // Server error, e.g. 404, 500, error
+        alert('server error!' + data.responseText);
+      }
+    });
+  }
+</script>
+
+<script>
+  searchQuery();
+</script>
+
+{% include 'resources/footer.html' %}

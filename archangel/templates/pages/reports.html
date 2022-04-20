@@ -1,0 +1,61 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Reports</title>
+<meta property="og:title" content="{{info['name']}} • Reports">
+<meta property="twitter:title" content="{{info['name']}} • Reports">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<link rel="stylesheet" href="/rsc/css/reports"> 
+
+<script src="/rsc/js/timestamp"></script>
+
+<h1>Reports</h1>
+
+<ul class="reports">
+{% for report in reports %}
+<li class="report" id="rep-{{report['time']}}-{{report['reporter']}}-{{report['episode']}}">
+    <h2><i class="fa fa-bug"></i> Report - {{report['seriesName']}}</h2>
+    <div>
+        <a href="/stream/{{report['series']}}/{{report['season']}}/{{report['episodeNumber']}}"><button><i class="fa-solid fa-arrow-up-right-from-square"></i></button></a>
+        <a onclick="deleteReport({{report['time']}}, {{report['reporter']}}, {{report['episode']}});"><button><i class="fa-solid fa-trash"></i></button></a>
+    </div>
+    
+    <p>Language: {{report['language']}} | Hoster: ???{{report['hoster']}}</p>
+    <p>Reason: ???{{report['reason']}}</p>
+    <p><a href="/admin/user?id={{report['reporter']}}">User ID: {{report['reporter']}}</a> | <n id="{{report['time']}}-{{report['reporter']}}-ts">{{report['time']}}</n></p>
+    <script async defer>
+        e = document.getElementById("{{report['time']}}-{{report['reporter']}}-ts");
+        ts = convertTimestampToLocalTime(e.innerHTML);
+        e.innerHTML = ts;
+    </script>
+</li>
+{% endfor %}
+</ul>
+
+<script async defer>
+    function deleteReport(t, r, e) {
+        $.ajax({
+            type: "POST",
+            url: "/reports",
+            data: {
+                action: 'delete',
+                time: t,
+                reporter: r,
+                stream: e
+            },
+            success: function(data) {
+                document.getElementById('rep-' + t + '-' + r + '-' + e).style.display = 'none';
+                sendNotification('info', 'Report Deleted', '', 500);
+            }
+        })
+    }
+</script>
+
+{% include 'resources/footer.html' %}

@@ -681,6 +681,7 @@ from flask import (Flask, abort, make_response, redirect, render_template,
                    request, send_file, session)
 
 from blue.rsc import rsc
+from blue.api import api
 from util import accounts, notifications, stream, watch, calendar
 
 from util.stream import urlreplacements
@@ -696,8 +697,8 @@ app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * MAX_UPLOAD_SIZE_MB
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
-
-app.secret_key = os.urandom(4096)
+secret_key = os.urandom(4096)
+app.secret_key = secret_key
 
 app.register_blueprint(rsc)
 
@@ -707,10 +708,13 @@ elif os.path.isfile('server/config.json'):
     os.chdir('server')
     config = 'config.json'
 else:
-    print('config file not found!!!')
+    app.logger.critical("Config File not in Folder")
     exit()
 with open(config, 'rb') as f:
     info = json.load(f)
+
+if info['api'] == True:
+    app.register_blueprint(api)
 
 info['defaultlanguage'] = info['language']
 
@@ -831,6 +835,11 @@ def reloadSpotlight():
         with open('spotlight.json', 'rb') as f:
             spotlight = json.load(f)
 
+def optimize_image_url(imageurl: str):
+    if 'u.livechart.me/anime' in imageurl and 'style=small' in imageurl:
+        imageurl = imageurl.replace('style=small', 'style=large')
+    return imageurl
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home():
@@ -845,12 +854,15 @@ def home():
     return render_template('pages/home.html', info=info, session=session, reqs=reqs, seriesIndex=seriesIndex, spotlight=spotlight, genreIndex=genreIndex, newestCreated=newestCreated, newestCreatedEpisodes=newestCreatedEpisodes, calendar=cldnr)
 
 @app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['GET', 'POST'])
 @app.route('/suche', methods=['GET', 'POST'])
 def search():
     if info['public_search'] == False and 'id' not in session: return abort(401)
     if request.method == 'POST':
         query = request.form['query']
-        results = stream.searchSeries(query)
+        countryfilter = request.form['countryfilter']
+        statusfilter = request.form['statusfilter']
+        results = stream.searchSeries(query, countryfilter, statusfilter)
         result = ''
         for r in results:
             result += f"""<a href="/stream/{r['seriesurlobject']}/1/1" style="text-decoration: none;">
@@ -871,10 +883,12 @@ def search():
 
         return result
     else:
-        return render_template('pages/search.html', info=info, session=session, seriesIndex=str(stream.getUnstructuredSeriesIndex()))
+        allcountrys = stream.getAvTags()['countrys']
+        return render_template('pages/search.html', info=info, session=session, seriesIndex=str(stream.getUnstructuredSeriesIndex()), allcountrys=allcountrys)
 
 # Index
 @app.route('/index', methods=['GET'])
+@app.route('/stream', methods=['GET'])
 def index():
     if info['public_index'] == False and 'id' not in session: return abort(401)
     if 'sort' in request.args and request.args['sort'].lower() in ['genre', 'genres']:
@@ -922,6 +936,24 @@ def country(country: str):
     series = stream.getSeriesWithCountry(country)
     return render_template('pages/genre.html', info=info, session=session, genre=country, series=series)
 
+@app.route('/startyear/<year>')
+def startyear(year: str):
+    if year == 'Today':
+        year = datetime.datetime.utcnow().year
+    else:
+        year = int(year)
+    series = stream.getSeriesWithStartYear(year)
+    return render_template('pages/genre.html', info=info, session=session, genre=f'Start Year: {year}', series=series)
+
+@app.route('/endyear/<year>')
+def endyear(year: str):
+    if year == 'Today':
+        year = datetime.datetime.utcnow().year
+    else:
+        year = int(year)
+    series = stream.getSeriesWithEndYear(year)
+    return render_template('pages/genre.html', info=info, session=session, genre=f'End Year: {year}', series=series)
+
 @app.route('/notifications')
 def notification_page():
     if 'id' not in session: return abort(401)
@@ -962,6 +994,7 @@ def reports():
 @app.route('/requests', methods=['GET', 'POST'])
 @app.route('/anfragen', methods=['GET', 'POST'])
 def requests():
+    if info['public_requests'] == False and 'id' not in session: return abort(401)
     reqs = stream.getRequests()
     if 'id' in session:
         uvotes = stream.getUserRequestVotes(session['id'])
@@ -1091,19 +1124,34 @@ def account_setting():
         else:
             return render_template('pages/account/settings.html', session=session, info=info)
 
-@app.route('/account/watched', methods=['GET', 'POST'])
-def account_watched():
+@app.route('/account/watched', methods=['GET'])
+@app.route('/account/list', methods=['GET'])
+@app.route('/watchlist', methods=['GET'])
+@app.route('/account/lists', methods=['GET'])
+@app.route('/account/history', methods=['GET'])
+@app.route('/account/planned', methods=['GET'])
+@app.route('/account/subscribed', methods=['GET'])
+@app.route('/account/subscribtions', methods=['GET'])
+def watchlists():
     if 'id' not in session: return abort(401)
-    return 'comming soon!'
+    
+    args = request.args
 
-@app.route('/account/subscribed', methods=['GET', 'POST'])
-@app.route('/account/subscribtions', methods=['GET', 'POST'])
-def account_subscribed():
-    if 'id' not in session: return abort(401)
-    subscribed_series = watch.getAllSubscribedSeries(session['id'])
-    subscribed_series = stream.getManySeries(subscribed_series)
+    if 'list' in args:
+        l = str(args['list']).lower()
+    else:
+        l = 'watchlist'
 
-    return render_template('pages/account/subscribed.html', session=session, info=info, series=subscribed_series)
+    if l in ['subscribed', 'subscribtions']:
+        subscribed_series = watch.getAllSubscribedSeries(session['id'])
+        subscribed_series = stream.getManySeries(subscribed_series)
+
+        return render_template('pages/lists/subscribed.html', session=session, info=info, series=subscribed_series)
+    elif l in ['history']:
+        eps = watch.getCompleted(session['id'])
+        return render_template('pages/lists/history.html', info=info, session=session, episodes=eps)
+    else:
+        return render_template('pages/lists/watchlist.html', info=info, session=session)
 
 # streaming
 @app.route('/redirect/stream/<id>', methods=['GET', 'POST'])
@@ -1138,6 +1186,9 @@ def stream_series(seriesId):
                 if stream.isSeriesNameTaken(name) == True: return 'this seriesname is already taken!!!'
                 description = request.form['description']
                 image = request.form['image']
+
+                image = optimize_image_url(image)
+
                 banner = request.form['banner']
                 genres = request.form['genres'].split(",")
                 stuff = request.form['stuff'].split(",")
@@ -1186,6 +1237,7 @@ def stream_series(seriesId):
             staff = request.form['staff'].split(',')
             startyear = request.form['startyear']
             endyear = request.form['endyear']
+            status = request.form['status']
 
             if name[0] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']: name = '-' + name
 
@@ -1198,6 +1250,7 @@ def stream_series(seriesId):
             if age != series['age']: stream.seriesUpdateAge(seriesId, age)
             if startyear != series['startyear']: stream.seriesUpdateStartYear(seriesId, startyear)
             if endyear != series['endyear']: stream.seriesUpdateEndYear(seriesId, endyear)
+            if status != series['status']: stream.seriesUpdateStatus(seriesId, status)
 
             stream.seriesUpdateStaff(seriesId, staff)
             stream.seriesUpdateGenres(seriesId, genres)
@@ -1247,7 +1300,11 @@ def stream_series(seriesId):
         else:
             subscribed = False
         seriesScore = stream.getTotalScore_Series(seriesId)
-        return render_template('pages/stream/series.html', info=info, session=session, seriesinfo=series, subscribed=subscribed, seriesScore=seriesScore)
+        if 'id' in session:
+            myScore = stream.getMyScore_Series(seriesId, session['id'])
+        else:
+            myScore = 0
+        return render_template('pages/stream/series.html', info=info, session=session, seriesinfo=series, subscribed=subscribed, seriesScore=seriesScore, myScore=myScore)
 
 @app.route('/stream/<series>/<season>', methods=['GET', 'POST'])
 @app.route('/stream/<series>/season-<season>', methods=['GET', 'POST'])
@@ -1307,7 +1364,11 @@ def stream_season(series, season):
     else:
         subscribed = False
     seriesScore = stream.getTotalScore_Series(seriesId)
-    return render_template('pages/stream/season.html', info=info, session=session, seriesinfo=series, season=season, seasonNumber=seasonNumber, subscribed=subscribed, seriesScore=seriesScore)
+    if 'id' in session:
+        myScore = stream.getMyScore_Series(seriesId, session['id'])
+    else:
+        myScore = 0
+    return render_template('pages/stream/season.html', myScore=myScore, info=info, session=session, seriesinfo=series, season=season, seasonNumber=seasonNumber, subscribed=subscribed, seriesScore=seriesScore)
 
 @app.route('/stream/<series>/<season>/<episode>', methods=['GET', 'POST'])
 @app.route('/stream/<series>/season-<season>/<episode>', methods=['GET', 'POST'])
@@ -1389,7 +1450,11 @@ def stream_episode(series, season, episode):
         watchedEpisodes = []
         subscribed = False        
     seriesScore = stream.getTotalScore_Series(seriesId)
-    return render_template('pages/stream/episode.html', info=info, session=session, episodes=episodes, seriesinfo=series, season=season, seasonNumber=seasonNumber, episodeNumber=episodeNumber, watched=watched, subscribed=subscribed, watchedEpisodes=watchedEpisodes, episodesUL=episodesUL, seriesScore=seriesScore)
+    if 'id' in session:
+        myScore = stream.getMyScore_Series(seriesId, session['id'])
+    else:
+        myScore = 0
+    return render_template('pages/stream/episode.html', myScore=myScore, info=info, session=session, episodes=episodes, seriesinfo=series, season=season, seasonNumber=seasonNumber, episodeNumber=episodeNumber, watched=watched, subscribed=subscribed, watchedEpisodes=watchedEpisodes, episodesUL=episodesUL, seriesScore=seriesScore)
 
 # legal
 @app.route('/dmca')
@@ -1405,6 +1470,9 @@ def admin():
         if 'key' in request.form and 'value' in request.form:
             key = str(request.form['key']).lower()
             value = request.form['value']
+            value = str(value)
+            if value == 'false': value = False
+            if value == 'true': value = True
             if key in ['language']:
                 info['language'] = str(value)
                 del info['defaultlanguage']
@@ -1413,6 +1481,70 @@ def admin():
                 info['defaultlanguage'] = value
                 info['language'] = lang
                 return 'changed default language'
+            elif key in ['public_stream']:
+                info['public'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed public stream'
+            elif key in ['public_seriesinfo']:
+                info['public_stream_series'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+            elif key in ['public_index']:
+                info['public_index'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+            elif key in ['public_search']:
+                info['public_search'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+            elif key in ['public_home']:
+                info['public_home'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+            elif key in ['public_requests']:
+                info['public_requests'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+            elif key in ['register']:
+                info['register'] = bool(value)
+                info['language'] = info['defaultlanguage']
+                del info['defaultlanguage']
+                with open('config.json', 'w') as f:
+                    json.dump(info, f, indent=2)
+                info['defaultlanguage'] = info['language']
+                info['language'] = lang
+                return 'changed'
+
             else:
                 return abort(400)
         else:
@@ -1509,7 +1641,6 @@ def calendar_page():
     else:
         nw = time.time()
         releases = calendar.getReleases(nw - (60 * 60 * 24 * 1), nw + (60 * 60 * 24 * 13))
-        print(releases[-1]['time'])
         return render_template('pages/calendar.html', info=info, session=session, releases=releases)
 
 # login / logout / register
@@ -1521,12 +1652,12 @@ def login():
         else:
             js = False
 
-
         if 'code' in request.form:
             username = str(request.form['username'])
             pwd = str(request.form['pwd'])
             fa = str(request.form['code']).replace(' ', '')
             valid = accounts.checkUserLogin(username, pwd)
+            
             if valid == False:
                 if js:
                     return 'invalid'
@@ -1747,6 +1878,19 @@ def background_set_completed_episode():
     watch.setCompleted(user, episode, series=series, episodeNumber=episodeNumber, seasonNumber=seasonNumber, seriesName=seriesName, season=season)
     return 'ok'
 
+@app.route('/background/score_series', methods=['POST'])
+def background_score_series():
+    if 'id' not in session: return abort(401)
+    series = int(request.form['series'])
+    score = int(request.form['score'])
+    if score < 0:
+        return abort(400)
+    elif score > 100:
+        return abort(400)
+    stream.score_Series(score, series, session['id'])
+    print('123')
+    return 'ok'
+
 @app.route('/background/viewcountadd', methods=['POST'])
 def background_viewcountadd():
     ip = str(request.remote_addr)
@@ -1782,6 +1926,40 @@ def background_del_completed_episode():
     if 'episode' not in form: return abort(400)
     watch.delCompleted(session['id'], int(form['episode']))
     return 'ok'
+
+@app.route('/background/edit_seasoninfo', methods=['POST'])
+def background_edit_seasoninfo():
+    if 'id' not in session: return abort(401)
+    if session['perms']['links'] != True: return abort(403)
+    form = request.form
+    seasonId = int(form['seasonId'])
+    seasonNumber = int(form['seasonNumber'])
+    seasonName = str(form['seasonName'])
+    seasonDescription = str(form['seasonDescription'])
+    if not stream.seasonUpdateNumber(seasonId, seasonNumber):
+        notifications.newNotification(session['id'], 10000, 0, 'edit season number taken', 'Season Number already taken', 'The season number you have taken already exists in the series! - Please choose a free one!', 'error')
+        return abort(500)
+    stream.seasonUpdateName(seasonId, seasonName)
+    stream.seasonUpdateDescription(seasonId, seasonDescription)
+    notifications.newNotification(session['id'], 5000, 0, 'edit season', 'Season Edited', 'You have successfully updated the season', 'success')
+    return 'ok'
+
+@app.route('/background/season_actions', methods=['POST'])
+def background_season_actions():
+    if 'id' not in session: return abort(401)
+    if session['perms']['links'] != True: return abort(403)
+    form = request.form
+    seasonId = int(form['seasonId'])
+    action = str(form['action']).lower()
+    if action in ['+1']:
+        stream.season_allEpisodesPlus1(seasonId)
+        return 'ok'
+    elif action in ['-1']:
+        stream.season_allEpisodesMinus1(seasonId)
+        return 'ok'
+    else:
+        return abort(400)
+
 
 @app.route('/background/del_stream', methods=['POST'])
 def background_del_stream():

@@ -1,0 +1,84 @@
+{
+    "/api/search": {
+        "type": "POST",
+        "parameter": {
+            "required": {
+                "query": "Search Query"
+            },
+            "optional": {
+
+            }
+        },
+        "return": {
+            "type": "JSON",
+            "structure": {
+                "code": 200,
+                "results": [],
+                "query": "query"
+            },
+            "example": {
+                "code": 200, 
+                "query": "overlo", 
+                "results": {
+                    "age": 16, 
+                    "alternative": [
+                      "Over Lord"
+                    ], 
+                    "banner": "", 
+                    "country": "Japan", 
+                    "created": 1647440852.7330854, 
+                    "description": "Die Geschichte beginnt mit dem beliebten Online-Spiel Yggdrasil, das eines Tages im Jahr 2138 abgeschaltet werden soll. Momonga, der Protagonist, will sich jedoch nicht ausloggen. Daraufhin wird Momonga in einen m\u00e4chtigen Skelett-Magier verwandelt. Die Welt von Yggdrasil ver\u00e4ndert sich daraufhin, sodass NPCs pl\u00f6tzlich Emotionen und ein eigenes Bewusstsein bekommen.<br>Ohne Eltern, Freunde oder einen Platz in der Gesellschaft versucht dieser junge Mann, die neue Welt zu erobern, die aus dem Spiel Yggdrasil entstanden ist.", 
+                    "display_name": "Overlord", 
+                    "endyear": 2022, 
+                    "genres": [
+                      "Horror", 
+                      "Fantasy", 
+                      "Isekai"
+                    ], 
+                    "id": 2, 
+                    "image": "https://cdn.anisearch.de/images/anime/cover/full/9/9855.webp", 
+                    "name": "Overlord", 
+                    "publisher": "", 
+                    "seasons": {}, 
+                    "seriesurlobject": "Overlord", 
+                    "staff": [], 
+                    "startyear": 2015, 
+                    "status": "Finished", 
+                    "studio": "Madhouse", 
+                    "stuff": [], 
+                    "subgenres": [
+                      "Skellet", 
+                      "D\u00e4mon", 
+                      "Ritter"
+                    ], 
+                    "views": 3
+                  }
+              }
+        },
+        "curl": "curl -X POST -d '{\"query\": \"Example Query\"}' {domain}/api/search"
+    },
+    "/api/upload/stream": {
+        "type": "POST",
+        "parameter": {
+            "required": {
+                "token": "API Auth Token",
+                "series": "The Id if the Series you want to add the Stream to",
+                "season": "The Season Number the Stream should be assigned to",
+                "episode": "The Episode Number the Stream should be assigned to",
+                "language": "Language of the Streamn",
+                "link": "Streaming Link",
+                "provier": "The provider of the Stream like Youtube, Voe ..."
+          },
+           "optional": {
+                "name": "A name for the episode",
+                "description": "A description for the episode"
+          }
+        },
+        "return": {
+            "type": "TXT",
+            "structure": "stream created",
+            "example": "stream created"
+        },
+        "curl": "curl -X POST -d '{\"token\": \"Your Token\", \"series\": \"Series ID\", \"season\": \"Seasonnumber\", \"episode\": \"Episode Number\", \"language\": \"Stream Language\", \"link\": \"Stream Link\", \"provier\": \"The Provider of the Stream\"}' {domain}/api/upload/stream"
+    }
+}

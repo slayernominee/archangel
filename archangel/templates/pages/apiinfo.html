@@ -1,0 +1,45 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+{% from "resources/macros.jinja" import json with context %}
+
+<title>{{info['name']}} • API</title>
+<meta property="og:title" content="{{info['name']}} • API">
+<meta property="twitter:title" content="{{info['name']}} • API">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<h1>API</h1>
+
+<br>
+
+<link rel="stylesheet" href="/rsc/css/api">
+
+{% for url in apiinfo %}
+<li class="modul">
+    <h3>{{url}}</h3>
+    <p>Type: {{apiinfo[url]['type']}}</p>
+    <p>Parameter: 
+        <p class="sub">Required: {{apiinfo[url]['parameter']['required']}}</p>
+        <p class="sub">Optional: {{apiinfo[url]['parameter']['optional']}}</p>
+    </p>
+    <p>Return: 
+        <p class="sub">Type: {{apiinfo[url]['return']['type']}}</p>
+        <details class="sub">
+            {{json(apiinfo[url]['return']['structure'])}}
+            <summary>Structure</summary>
+        </details>
+        <details class="sub">
+            {{json(apiinfo[url]['return']['example'])}}
+            <summary>Example</summary>
+        </details>
+    </p>
+    <p style="user-select: none;">Curl: <code style="user-select: text;">{{apiinfo[url]['curl'].replace('{domain}', info['domain'])}}</code></p>
+</li>
+{% endfor %}
+
+{% include 'resources/footer.html' %}

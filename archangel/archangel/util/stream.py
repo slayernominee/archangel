@@ -7,7 +7,7 @@ seriesScores (id integer, series integer, score integer, voter integer, time int
 seasonScores (id integer, season integer, score integer, voter integer, time integer);
 episodeScores (id integer, episode integer, score integer, voter integer, time integer);
 
-series (id int, name str, updated int, image str, banner str, description str, country str, stuff str, genres str, studio str, alternative str, startyear int, endyear int, age int, created int, subgenres str, publisher str, views int);
+series (id int, name str, updated int, image str, banner str, description str, country str, stuff str, genres str, studio str, alternative str, startyear int, endyear int, age int, created int, subgenres str, publisher str, views int, status text);
 season (id int, series int, number int, name int, description str, views int);
 episode (id int, series int, season integer, language str, name str, description str, number int, link str, hoster str, created int, views int);
 
@@ -31,11 +31,13 @@ def display_name(name: str) -> str:
 def urlreplacements(url: str) -> str:
     url = url.replace('&0x2F', '/')
     url = url.replace('&0x5C', '\\')
+    url = url.replace('&0x44', '?')
     return url
 
 def makeurl(url: str) -> str:
     url = url.replace('/', '&0x2F')
     url = url.replace('\\', '&0x5C')
+    url = url.replace('?', '&0x44')
     if url[0] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
         url = '-' + url
     return url
@@ -233,6 +235,17 @@ def getTotalScore_Episode(episode: int) -> dict:
         score['score'] = round(sum(scs) / len(scs))
     return score
 
+def getMyScore_Series(series: int, user: int) -> int:
+    score = 0
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT * FROM seriesScores WHERE series=? AND voter=?', (series, user))
+    e = c.fetchone()
+    if e not in [None, (), (None,), []]:
+        score = e[2]
+    conn.close()
+    return score
+
 # Episode
 def newEpisodeId() -> int:
     conn = sqlite3.connect(db)
@@ -268,6 +281,19 @@ def createEpisode(season: int, language: str, link: str, hoster: str, number: in
     series = getSeriesBySeason(season)
     conn = sqlite3.connect(db)
     c = conn.cursor()
+    c.execute('INSERT INTO episode VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (episode, series, season, language, name, description, number, link, hoster, time.time(), 0))
+    conn.commit()
+    conn.close()
+    return episode
+
+def createEpisodeWSeries(series: int, seasonnumber: int, language: str, link: str, hoster: str, number: int, name: str='', description: str='') -> int:
+    """The series must exists!"""
+    episode = newEpisodeId()
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT id FROM season WHERE series=? AND number=?', (series, seasonnumber))
+    season = c.fetchone()
+    season = season[0]
     c.execute('INSERT INTO episode VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (episode, series, season, language, name, description, number, link, hoster, time.time(), 0))
     conn.commit()
     conn.close()
@@ -409,7 +435,7 @@ def getSeason(season: int):
     return s
 
 # Series
-def jsonfySeries(seriesObject: tuple, seasonObjects: list=[]) -> dict:
+def jsonfySeries(seriesObject: tuple, seasonObjects: list=[], getEpisodes:bool = False) -> dict:
     if seriesObject in [None, (None)]: return None
     genres = seriesObject[8]
     stuff = seriesObject[7]
@@ -449,8 +475,23 @@ def jsonfySeries(seriesObject: tuple, seasonObjects: list=[]) -> dict:
         "subgenres": [],
         "publisher": seriesObject[16],
         "views": seriesObject[17],
+        "status": seriesObject[18],
         "seriesurlobject": makeurl(seriesObject[1])
     }
+    if getEpisodes:
+        conn = sqlite3.connect(db)
+        c = conn.cursor()
+        c.execute('SELECT * FROM episode WHERE series=?', (seriesinfo['id'], ))
+        episodes = c.fetchall()
+        eps = []
+        episodecount = 0
+        for episode in episodes:
+            e = jsonfyEpisode(episode)
+            eps.append(e)
+            episodecount += 1
+        seriesinfo['episodes'] = eps
+        seriesinfo['episodecount'] = episodecount
+
     if genres != None:
         for g in genres.split(","):
             if g == '': continue
@@ -486,7 +527,7 @@ def newSeriesId() -> int:
     else:
         return maxid + 1
 
-def createSeries(name, updated: int=time.time(), image: str='', banner: str='', description: str='', country: str='', stuff: list=[], genres: list=[], subgenres: list=[], studio: str='', alternativ: list=[], age: int=-1, startyear: int=-1, endyear: int=-1) -> int:
+def createSeries(name, updated: int=time.time(), image: str='', banner: str='', description: str='', country: str='', stuff: list=[], genres: list=[], subgenres: list=[], studio: str='', alternativ: list=[], age: int=-1, startyear: int=-1, endyear: int=-1, status: str='unknown') -> int:
     series = newSeriesId()
     conn = sqlite3.connect(db)
     c = conn.cursor()
@@ -504,7 +545,7 @@ def createSeries(name, updated: int=time.time(), image: str='', banner: str='', 
     alternative = ''
     for al in alternativ:
         alternative += al + ','
-    c.execute('INSERT INTO series VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (series, name, updated, image, banner, description, country, ',' + staff, ',' + genre, studio, ',' + alternative, startyear, endyear, age, updated, ',' + subgenre, '', 0))
+    c.execute('INSERT INTO series VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (series, name, updated, image, banner, description, country, ',' + staff, ',' + genre, studio, ',' + alternative, startyear, endyear, age, updated, ',' + subgenre, '', 0, status))
     conn.commit()
     conn.close()
     return series
@@ -539,19 +580,20 @@ def getSeriesIndex() -> dict:
     c = conn.cursor()
     c.execute('SELECT * FROM series')
     series = c.fetchall()
-    conn.close()
     se = {
     "a": [], "b": [], "c": [], "d": [], "e": [], "f": [], "g": [], "h": [], "i": [],
     "j": [], "k": [], "l": [], "m": [], "n": [], "o": [], "p": [], "q": [], "r": [],
     "s": [], "t": [], "u": [], "v": [], "w": [], "x": [], "y": [], "z": [], "#": []
     }
     for s in series:
-        s = jsonfySeries(s)
+        c.execute('SELECT * FROM season WHERE series=?', (s[0], ))
+        seasons = c.fetchall()
+        s = jsonfySeries(s, seasons, True)
         if str(s['name'])[0].lower() in se:
             se[str(s['name'])[0].lower()].append(s)
         else:
             se['#'].append(s)
-
+    conn.close()
     return se
 
 def getSeriesIndex_Genre() -> dict:
@@ -563,16 +605,18 @@ def getSeriesIndex_Genre() -> dict:
     c.execute('SELECT * FROM series')
     series = c.fetchall()
 
-    conn.close()
+    
     for s in series:  
-        sx = jsonfySeries(s)
+        c.execute('SELECT * FROM season WHERE series=?', (s[0], ))
+        seasons = c.fetchall()
+        sx = jsonfySeries(s, seasons, True)
         sl.append(se)
         for genre in sx['genres']:
             if genre not in se:
                 se[genre] = [sx]
             else:
                 se[genre].append(sx)
-
+    conn.close()
     se_s = {}
     for genre in sorted(se):
         se_s[genre] = se[genre]
@@ -588,15 +632,16 @@ def getSeriesIndex_StartYear() -> dict:
     c.execute('SELECT * FROM series')
     series = c.fetchall()
 
-    conn.close()
-    for s in series:  
-        sx = jsonfySeries(s)
+    for s in series:
+        c.execute('SELECT * FROM season WHERE series=?', (s[0], ))
+        seasons = c.fetchall() 
+        sx = jsonfySeries(s, seasons, True)
         sl.append(se)
         if str(sx['startyear']) not in se:
             se[str(sx['startyear'])] = [sx]
         else:
             se[str(sx['startyear'])].append(sx)
-
+    conn.close()
     se_s = {}
     for genre in sorted(se):
         se_s[genre] = se[genre]
@@ -702,10 +747,39 @@ def getSeriesWithCountry(country: str) -> list:
         se.append(jsonfySeries(s))
     return se
 
-def searchSeries(query: str) -> list:
+def getSeriesWithStartYear(year: int) -> list:
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    c.execute('SELECT * FROM series WHERE LOWER(name) LIKE ? OR LOWER(alternative) LIKE ?', ('%' + query.lower() + '%', '%' + query.lower() + '%'))
+    c.execute('SELECT * FROM series WHERE startyear=?', (year,))
+    series = c.fetchall()
+    conn.close()
+    se = []
+    for s in series:
+        se.append(jsonfySeries(s))
+    return se
+
+def getSeriesWithEndYear(year: int) -> list:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT * FROM series WHERE endyear=?', (year,))
+    series = c.fetchall()
+    conn.close()
+    se = []
+    for s in series:
+        se.append(jsonfySeries(s))
+    return se
+
+def searchSeries(query: str, country: str='Any', status: str='Any') -> list:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    if country == 'Any' and status=='Any':
+        c.execute('SELECT * FROM series WHERE LOWER(name) LIKE ? OR LOWER(alternative) LIKE ?', ('%' + query.lower() + '%', '%' + query.lower() + '%'))
+    elif country == 'Any':
+        c.execute('SELECT * FROM series WHERE (LOWER(name) LIKE ? OR LOWER(alternative) LIKE ?) AND status=?', ('%' + query.lower() + '%', '%' + query.lower() + '%', status))
+    elif status == 'Any':
+        c.execute('SELECT * FROM series WHERE (LOWER(name) LIKE ? OR LOWER(alternative) LIKE ?) AND country=?', ('%' + query.lower() + '%', '%' + query.lower() + '%', country))
+    else:
+        c.execute('SELECT * FROM series WHERE (LOWER(name) LIKE ? OR LOWER(alternative) LIKE ?) AND country=? AND status=?', ('%' + query.lower() + '%', '%' + query.lower() + '%', country, status))
     result = c.fetchall()
     conn.close()
     results = []
@@ -763,6 +837,13 @@ def seriesUpdateBanner(id: int, banner: str) -> None:
     conn = sqlite3.connect(db)
     c = conn.cursor()
     c.execute('UPDATE series SET banner=? WHERE id=?', (banner, id))
+    conn.commit()
+    conn.close()
+
+def seriesUpdateStatus(id: int, status: str) -> None:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('UPDATE series SET status=? WHERE id=?', (status, id))
     conn.commit()
     conn.close()
 
@@ -824,6 +905,54 @@ def seriesUpdateAge(id: int, age: int) -> None:
     conn = sqlite3.connect(db)
     c = conn.cursor()
     c.execute('UPDATE series SET age=? WHERE id=?', (age, id))
+    conn.commit()
+    conn.close()
+
+def seasonUpdateNumber(id: int, number: int) -> bool:
+    """If True -> success; False -> number taken..."""
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT * FROM season WHERE id=?', (id, ))
+    season = c.fetchone()
+    seriesx = season[1]
+    numberx = season[2]
+    c.execute('SELECT * FROM season WHERE series=? AND number=? AND id!=?', (seriesx, number, id))
+    e = c.fetchone()
+    print(e)
+    if e not in [None, (None), (), [], (None,)]:
+        conn.close()
+        return False
+    else:
+        c.execute('UPDATE season SET number=? WHERE id=?', (number, id))
+        conn.commit()
+        conn.close()
+        return True
+
+def seasonUpdateName(id: int, name: str) -> None:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('UPDATE season SET name=? WHERE id=?', (name, id))
+    conn.commit()
+    conn.close()
+
+def seasonUpdateDescription(id: int, description: str) -> None:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('UPDATE season SET description=? WHERE id=?', (description, id))
+    conn.commit()
+    conn.close()
+
+def season_allEpisodesPlus1(id: int) -> None:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('UPDATE episode SET number = number + 1 WHERE season=? ', (id, ))
+    conn.commit()
+    conn.close()
+
+def season_allEpisodesMinus1(id: int) -> None:
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('UPDATE episode SET number = number - 1 WHERE season=? ', (id, ))
     conn.commit()
     conn.close()
 
@@ -1109,3 +1238,24 @@ def getNewestCreatedEpisodes(count: int=32) -> list:
         eps.append(e)
     conn.close()
     return eps
+
+def getAvTags() -> dict:
+    avtags = {
+        "countrys": [],
+        "startyear": [],
+        "endyear": [],
+        "age": [],
+        "genres": [],
+        "subgenres": [],
+        "studios": [],
+        "languages": []
+    }
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT country from series')
+    countrys = c.fetchall()
+    for country in countrys:
+        if country[0] not in [None, ''] and country[0] not in avtags['countrys']:
+            avtags['countrys'].append(country[0])
+    conn.close()
+    return avtags

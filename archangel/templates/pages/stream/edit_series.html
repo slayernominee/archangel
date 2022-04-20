@@ -1,0 +1,65 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Edit - {{series['name']}}</title>
+<meta property="og:title" content="{{info['name']}} • Edit - {{series['name']}}">
+<meta property="twitter:title" content="{{info['name']}} • Edit - {{series['name']}}">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<h1>Edit {{series['name']}}</h1>
+
+<div id="edit_series" style="text-align: center;">
+    <form method="POST">
+        <input type="hidden" name="id" value="{{series['id']}}">
+        <input required name="name" type="text" placeholder="Name | SeriesName" value="{{series['name']}}">
+        <br>
+        <textarea name="description" placeholder="Synphosis | A long time ago ...">{{series['description']}}</textarea>
+        <br>
+        <input name="image" type="url" placeholder="Image | https://..." value="{{series['image']}}">
+        <br>
+        <input name="banner" type="url" placeholder="Banner | https://..." value="{{series['banner']}}">
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <hr style="width: 40vw;">
+        </div>
+        <select name="status" id="status-edit">
+            <option value="{{series['status']}}">- {{series['status']}} -</option>
+            <option value="Not Yet Airing">Not Yet Airing</option>
+            <option value="Airing">Airing</option>
+            <option value="Paused">Paused</option>
+            <option value="Finished">Finished</option>
+            <option value="Canceled">Canceled</option>
+        </select>
+        <br>
+        <input name="genres" type="text" placeholder="Genres | Genre1,Genre2,Genre3,Genre4" value="{% for genre in series['genres'] %}{{genre}},{% endfor %}">
+        <br>
+        <input name="subgenres" type="text" placeholder="Subgenres | Subgenre1,Subgenre2,Subgenre3" value="{% for genre in series['subgenres'] %}{{genre}},{% endfor %}">
+        <br>
+        <input name="staff" type="text" placeholder="Staff | Regiseur,Actor1,Actor2" value="{% for staff in series['stuff'] %}{{staff}},{% endfor %}">
+        <br>
+        <input name="country" type="text" placeholder="Country | Japan" value="{{series['country']}}">
+        <br>
+        <input name="studio" type="text" placeholder="Studio | ExampleStudio" value="{{series['studio']}}">
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <hr style="width: 40vw;">
+        </div>
+        <input name="alternative" type="text" placeholder="Alternative Names | SeriesNameInJapan,SeriesNameInGerman" value="{% for genre in series['alternative'] %}{{genre}},{% endfor %}">
+        <br>
+        <input name="age" min="0" type="number" placeholder="Age Recommendation | 0" value="{% if series['age'] != -1 %}{{series['age']}}{% endif %}">
+        <br>
+        <input name="startyear" type="number" placeholder="Start Year | 2021" value="{% if series['startyear'] != -1 %}{{series['startyear']}}{% endif %}">
+        <br>
+        <input name="endyear" type="number" placeholder="End Year | 2022" value="{% if series['endyear'] != -1 %}{{series['endyear']}}{% endif %}">
+        <br>
+        <input type="submit">
+    </form>
+</div>
+
+{% include 'resources/footer.html' %}

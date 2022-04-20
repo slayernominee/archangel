@@ -24,6 +24,20 @@ def setCompleted(user: int, episode:int, seasonNumber: int=None, episodeNumber: 
     else:
         conn.close()
 
+def getCompleted(user: int) -> list:
+    """start=0 -> last watched, """
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    c.execute('SELECT * FROM completed WHERE user=? ORDER BY date DESC', (user, ))
+    entrys = c.fetchmany(10)
+    conn.commit()
+    episodes = []
+    for e in entrys:
+        ep = jsonfyEpisode(e)
+        episodes.append(ep)
+
+    return episodes
+
 def delCompleted(user: int, episode: int) -> None:
     conn = sqlite3.connect(db)
     c = conn.cursor()
@@ -118,5 +132,7 @@ def getAllSubscribedSeries(user: int) -> list:
     conn.close()
     se = []
     for serie in series:
-        se.append(serie[1])
+        if serie not in [None, (), (None)]:
+            id = serie[1]
+            se.append(id)
     return se

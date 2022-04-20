@@ -1,0 +1,66 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Login</title>
+<meta property="og:title" content="{{info['name']}} • Login">
+<meta property="twitter:title" content="{{info['name']}} • Login">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<script src="/rsc/js/parameter"></script>
+
+<style>
+    #login {
+        position: relative;
+        text-align: center;
+        top: 30vh;
+    }
+</style>
+<body>
+<div id='login'>
+    <form method="post" action="/login">
+        <input id="redirect_url" type="hidden" name="redirect" value="">
+        <input type="text" name='user' placeholder="Username/E-Mail" autocomplete="email">
+        <br>
+        <input type="password" name='pwd' placeholder="Password" autocomplete="current-password">
+        <br>
+        <input type='submit'>
+    </form>
+</div>
+</body>
+
+{% if error %}
+<script>
+    sendNotification('error', 'Wrong Login Data', 'The Login data you have used seems to be wrong! Please check if you wrote everything correctly.<br>If you want to create a Account please <a href="/register">register</a>.', 10000);
+</script>
+{% endif %}
+
+<script>
+    r = findGetParameter('redirect');
+    document.getElementById('redirect_url').value = r;
+</script>
+
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+
+{% if vermail %}
+<script async defer>
+    sendNotification('info', 'Verify Your Mail', 'Before you can login, you must verify your mail! - Please click in the link in the mail we have sent to you' ,10000);
+</script>
+{% elif verified %}
+<script async defer>
+    sendNotification('success', 'Mail verified', 'Your Mail is now verified! - You can now login with the selected account data', 5000);
+</script>
+{% endif %}
+
+{% include 'resources/footer.html' %}

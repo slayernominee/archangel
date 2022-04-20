@@ -1,0 +1,345 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}}</title>
+<meta property="og:title" content="{{info['name']}}">
+<meta property="twitter:title" content="{{info['name']}}">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<link rel="stylesheet" href="/rsc/css/home">
+<!-- Overrides -->
+<link rel="stylesheet" media="screen and (max-width: 800px)" href="/rsc/css/home_800">
+<link rel="stylesheet" media="screen and (max-width: 500px)" href="/rsc/css/home_500">
+<link rel="stylesheet" media="screen and (min-width: 3500px) and (min-height: 2000px)" href="/rsc/css/home_3500x2000">
+
+<link rel="stylesheet" href="/rsc/css/table">
+<link rel="stylesheet" href="/rsc/css/tags">
+
+<script src="/rsc/js/timestamp"></script>
+
+<h1>{{info['name']}}</h1>
+
+<div id="home-announcement">
+    
+</div>
+
+{% if info['home_index'] == True %}
+<div id="index-preview">
+    {% for i in seriesIndex %}
+    <a href="/index#{{i}}"><button>{{i.upper()}}</button></a>
+    {% endfor %}
+    <a id="index-preview-search-button" href="/search"><button>Search</button></a>
+</div>
+{% endif %}
+<br><br>
+
+<div id="spotlights">
+    {% for sl in spotlight %}
+    <div id="spotlight-{{sl}}" style="display: none;">
+        <div class="spotlight">
+            {% for serie in spotlight[sl] %}     
+            <a id="spotlight-{{sl}}-{{serie['id']}}" href="/stream/{{serie['seriesurlobject']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['season']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['season']}}{% endif %}1/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['episode']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['episode']}}{% endif %}1" style="text-decoration: none;">
+                <div style="background: linear-gradient(rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.3)),url('{{serie['banner']}}') center no-repeat; background-size: 100%;" class="spotlight_block">
+                    <h3>
+                        {% if serie['name'].startswith('-') %}
+                        {{serie['name'][1:]}}
+                        {% else %}
+                        {{serie['name']}}
+                        {% endif %}
+                    </h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    spotlights = [{% for sl in spotlight %}{{sl}},{% endfor %}];
+    cIndex = 0;
+    
+    document.getElementById('spotlight-' + String(spotlights[cIndex])).style.display = 'block';
+    setInterval(function() {
+        document.getElementById('spotlight-' + String(spotlights[cIndex])).style.display = 'none';
+        if ((cIndex + 1) in spotlights) {
+            cIndex += 1;
+            document.getElementById('spotlight-' + String(spotlights[cIndex])).style.display = 'block';
+        } else {
+            cIndex = 0;
+            document.getElementById('spotlight-' + String(spotlights[cIndex])).style.display = 'block';
+        }
+    }, 10000)
+</script>
+
+<br><br>
+
+<script>
+    function setTimeDifferenceCreatedEpisode(created, id) {
+        time = parseInt(Date.now() / 1000);
+        dif = time - created;
+        if (dif > 385 * 24 * 60 * 60) { // 385d / 55w
+            text = (dif / (365 * 24 * 60 * 60) | 0) + 'y';    
+        }else if (dif > 10 * 24 * 60 * 60) { // 9d
+            text = (dif / (7 * 24 * 60 * 60) | 0) + 'w';    
+        } else if (dif > 36 * 60 * 60) { // 36h
+            text = (dif / (24 * 60 * 60) | 0) + 'd';    
+        } else if (dif > 90 * 60) { // 90m
+            text = (dif / (60 * 60) | 0) + 'h';
+        } else if (dif > 90) { // 90s
+            text = (dif / 60 | 0) + 'm';
+        } else {
+            text = dif + 's';
+        }
+        document.getElementById(id).innerHTML = text + ' ago';
+    }
+</script>
+
+
+<h2 style="text-align: center;">{% if 'language' in session %}{{info['language']['home']['new_episodes'][session['language']]['title']}}{% else %}{{info['language']['home']['new_episodes'][info['defaultlanguage']]['title']}}{% endif %}</h2>
+<div id="new-releases" style="padding: 0 8vw;">
+    {% for episode in newestCreatedEpisodes %}
+    <th>
+        <hr style="width: 100%;">
+        <a style="text-decoration: none;" href="/stream/{{episode['seriesurlobject']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['season']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['season']}}{% endif %}{{episode['seasonNumber']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['episode']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['episode']}}{% endif %}{{episode['number']}}">
+            <li class="listElement">
+                <tr>
+                    {% if episode['seriesName'].startswith('-') %}
+                    {{episode['seriesName'][1:]}} | 
+                    {% else %}
+                    {{episode['seriesName']}} | 
+                    {% endif %}
+                    {% if episode['name'] == '' %}
+                    {{episode['number']}}
+                    {% else %}
+                    {{episode['name']}}
+                    {% endif %}
+                    - {{episode['language']}}
+                    
+                    <none class="episode-release-timestamp" id="timestamp-{{episode['created']}}-{{episode['series']}}"></none>
+                    <script async defer>
+                        created = parseInt({{episode['created']}});
+                        id = 'timestamp-{{episode['created']}}-{{episode['series']}}';
+                        setTimeDifferenceCreatedEpisode(created, id);
+                        setInterval(function() {
+                            created = parseInt({{episode['created']}});
+                            id = 'timestamp-{{episode['created']}}-{{episode['series']}}';
+                            setTimeDifferenceCreatedEpisode(created, id);
+                        }, 1000);
+                    </script>
+                    
+                </tr>
+                <tr>
+                    <div class="episode-release-tree">
+                        {% if episode['seriesName'].startswith('-') %}
+                        {{episode['seriesName'][1:]}} > 
+                        {% else %}
+                        {{episode['seriesName']}} > 
+                        {% endif %}
+                        Season {{episode['seasonNumber']}} > Episode {{episode['number']}}
+                    </div>
+                </tr>
+            </li>
+        </a>
+    </th>
+    {% endfor %}
+</div>
+
+<br><br>
+
+<h2 style="text-align: center;">{% if 'language' in session %}{{info['language']['home']['new_series'][session['language']]['title']}}{% else %}{{info['language']['home']['new_series'][info['defaultlanguage']]['title']}}{% endif %}</h2>
+<div id="new-series" style="padding: 0 8vw; display: flex;" class="middle">
+    <button class="transparent" style="border-radius: 50%; margin-right: 1%;" onclick="new_series_switch_right();">
+        <i class="fa fa-arrow-left fa-2x"></i>
+    </button>
+    <div id="new-series-active-series">
+        
+    </div>
+    <button class="transparent" style="border-radius: 50%; margin-left: 1%;" onclick="new_series_switch_left();">
+        <i class="fa fa-arrow-right fa-2x"></i>
+    </button>
+</div>
+
+<script async>
+    new_series_list = [{% for serie in newestCreated %}
+    `<a style="text-decoration: none;" href="/stream/{{serie['id']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['season']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['season']}}{% endif %}1/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['episode']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['episode']}}{% endif %}1">
+        <div style="float: left; margin-right: 15px; position: relative;">
+            <img src="{{serie['image']}}" alt="series cover" style="overflow: hidden; height: 330px;width: 220px; object-fit: cover;">
+            <h2 style="position: absolute; bottom: 3px; left: 5px;">{% if serie['name'].startswith('-') %}{{serie['name'][1:]}}{% else %}{{serie['name']}}{% endif %}</h2>
+        </div>
+    </a>`,
+    {% endfor %}];
+    
+    current_new_series_index = 0;
+    max_new_series_index = new_series_list.length - 1;
+    function new_series_switch_right() {
+        current_new_series_index -= 1;
+        if (current_new_series_index < 0) {
+            current_new_series_index = max_new_series_index;
+        }
+        reload_new_series();
+    }
+    function new_series_switch_left() {
+        current_new_series_index += 1;
+        if (current_new_series_index > max_new_series_index) {
+            current_new_series_index = 0;
+        }
+        reload_new_series();
+    }
+    function reload_new_series() {
+        new_series_active_series = document.getElementById('new-series-active-series');
+        new_series_active_series.innerHTML = new_series_list[current_new_series_index];
+        if (current_new_series_index + 1 > max_new_series_index) {
+            new_series_active_series.innerHTML += new_series_list[0];
+            new_series_active_series.innerHTML += new_series_list[1];
+            new_series_active_series.innerHTML += new_series_list[2];
+            new_series_active_series.innerHTML += new_series_list[3];
+        } else {
+            new_series_active_series.innerHTML += new_series_list[current_new_series_index + 1];
+            if (current_new_series_index + 2 > max_new_series_index) {
+                new_series_active_series.innerHTML += new_series_list[0];
+                new_series_active_series.innerHTML += new_series_list[1];
+                new_series_active_series.innerHTML += new_series_list[2];
+            } else {
+                new_series_active_series.innerHTML += new_series_list[current_new_series_index + 2];
+                if (current_new_series_index + 3 > max_new_series_index) {
+                    new_series_active_series.innerHTML += new_series_list[0];
+                    new_series_active_series.innerHTML += new_series_list[1];
+                } else {
+                    new_series_active_series.innerHTML += new_series_list[current_new_series_index + 3];
+                    if (current_new_series_index + 4 > max_new_series_index) {
+                        new_series_active_series.innerHTML += new_series_list[0];
+                    } else {
+                        new_series_active_series.innerHTML += new_series_list[current_new_series_index + 4];
+                    }
+                }
+            }
+        }
+    }  
+    reload_new_series();
+</script>
+<br><br>
+
+
+
+<h2 style="text-align: center;">Calendar</h2>
+<div id="calendar-embed" class="calendar">
+
+    <!-- 
+    <div id="calendar_day_' + dd_mm + '" class="calendar_day">
+        <h3>16.03</h3>
+        <li>
+            <h4>Series 1</h4>
+            <p class="darkertext">S1 E1 <none class="available_language">de</none> ~ 16:30</p>
+        </li>
+        <li>
+            <h4>Series 1</h4>
+            <p class="darkertext">S1 E2 <none class="available_language">de</none> ~ 17:30</p>
+        </li>
+    -->
+
+</div>
+<span style="display: flex; justify-content: center;"><a style="text-decoration: underline;" href="/{% if 'language' in session %}{{info['language']['links']['direct'][session['language']]['calendar']}}{% else %}{{info['language']['links']['direct'][info['defaultlanguage']]['calendar']}}{% endif %}">show all</a></span>
+
+
+<script async defer>
+    // Create Calendar Days
+    calendar_embed = document.getElementById('calendar-embed');
+    
+    // Yesterday
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    var dd = String(yesterday.getDate()).padStart(2, '0');
+    var mm = String(yesterday.getMonth() + 1).padStart(2, '0');
+
+    dd_mm = dd + '.' + mm;
+    calendar_embed.innerHTML += '<div id="calendar_day_' + dd_mm + '" class="calendar_day"><h3 class="calendar_past">' + dd_mm + '</h3></div>';
+    
+    // Today
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+
+    dd_mm = dd + '.' + mm;
+    calendar_embed.innerHTML += '<div id="calendar_day_' + dd_mm + '" class="calendar_day"><h3 class="calendar_today">' + dd_mm + '</h3></div>';
+
+    // Next 12 Days
+    da = today;
+    for (let i = 0; i < 12; i++) {
+        da.setDate(da.getDate() + 1);
+        var dd = String(da.getDate()).padStart(2, '0');
+        var mm = String(da.getMonth() + 1).padStart(2, '0');
+        dd_mm = dd + '.' + mm;
+        calendar_embed.innerHTML += '<div id="calendar_day_' + dd_mm + '" class="calendar_day"><h3 class="calendar_future">' + dd_mm + '</h3></div>';
+    } 
+
+    // Fill Calnedar Days
+    {% for release in calendar %}
+    dd_mm = convertTimeStampToLocalDD_MM("{{release['time']}}");
+    redt = convertTimestampToLocalH_M("{{release['time']}}");
+    calendar_day = document.getElementById('calendar_day_' + dd_mm);
+    calendar_day.innerHTML += '<li onclick="document.location.href = \'/stream/{{release['series']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['season']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['season']}}{% endif %}{{release['season']}}/{% if 'language' in session %}{{info['language']['links']['elements'][session['language']]['episode']}}{% else %}{{info['language']['links']['elements'][info['defaultlanguage']]['episode']}}{% endif %}{{release['episode']}}\'" class="transition_250 hoverbdraccent2 pointer"><h4>{{release['seriesname']}}</h4><p class="darkertext">S{{release['season']}} E{{release['episode']}} <none class="available_language">{{release['language']}}</none> ~ ' + redt + '</p></li>';
+    {% endfor %} 
+
+</script>
+<br><br>
+
+
+<!-- 
+    <h2 style="text-align: center;">Other Users watch</h2>
+    <div id="other-watch">
+        Comming Soon - SlideShow
+    </div>
+    
+    <br><br>
+    
+    <link rel="stylesheet" href="/rsc/css/rqs">
+    <h2 style="text-align: center;">{% if 'language' in session %}{{info['language']['home']['requests'][session['language']]['title']}}{% else %}{{info['language']['home']['requests'][info['defaultlanguage']]['title']}}{% endif %}</h2>
+    <div id="requests">
+        <div onclick="window.location.href = '/requests'" id="top-requests-home">
+            {% for req in range(reqs[:8] | length)%}
+            <li id="request-{{reqs[req]['id']}}">
+                <p class="rank">{{req + 1}}.</p>
+                <h3 class="s-name">{{reqs[req]['name']}}<br><span class="req-t">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['req_t'].replace('{date}', 'N/A')}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['req_t'].replace('{date}', 'N/A')}}{% endif %}</span></h3>
+                <button id="upvote-{{reqs[req]['id']}}" class="upvote"><i class="fa-solid fa-sort-up fa-3x"></i></button>
+                <h3 class="votes"><span class="votes_note">{% if 'language' in session %}{{info['language']['reqs'][session['language']]['votes']}}{% else %}{{info['language']['reqs'][info['defaultlanguage']]['votes']}}{% endif %}</span><br><div id="votes-{{reqs[req]['id']}}" style="text-align: center;">{{reqs[req]['votes']}}</div></h3>
+            </li>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br>
+    
+    <h2 style="text-align: center;">Recommendations</h2>
+    <div id="new-releases">
+        Comming Soon - should be a carousel
+    </div>
+    
+    <br><br>
+-->
+
+<h2 style="text-align: center;">Genres</h2>
+<div id="genres" class="spotlight">
+    <br>
+    {% for genre in genreIndex %}
+    <a href="/genre/{{genre}}">
+        <li class="tag">
+            {{genre}}
+        </li>
+    </a>
+    {% endfor %}
+</div>
+
+<br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br>
+
+<script async defer src="/rsc/languagereplacements"></script>
+
+</script>
+
+{% include 'resources/footer.html' %}

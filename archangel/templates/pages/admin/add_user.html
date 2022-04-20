@@ -1,0 +1,31 @@
+{% include 'resources/header.html' %}
+{% include 'resources/navigationbar.html' %}
+
+<title>{{info['name']}} • Add User</title>
+<meta property="og:title" content="{{info['name']}} • Add User">
+<meta property="twitter:title" content="{{info['name']}} • Add User">
+
+<meta name="description" content="{{info['description']}}">
+<meta name="og:description" content="{{info['description']}}">
+<meta name="twitter:description" content="{{info['description']}}">
+
+<meta name="twitter:image" content="{{info['logo']}}">
+<meta name="og:image" content="{{info['logo']}}">
+
+<h1>Add a User</h1>
+
+<div id="add_user" style="text-align: center;">
+    <form method="POST">
+        <input required name="username" type="text" placeholder="The Username that the new User should have">
+        <br>
+        <input required name="mail" type="text" placeholder="A Mail that the new User have">
+        <br>
+        <input required name="pwd" type="password" placeholder="The password of the new user">
+        <br>
+        <input required name="pwd-2" type="password" placeholder="Repeat the Password of the new User">
+        <br>
+        <input type="submit">
+    </form>
+</div>
+
+{% include 'resources/footer.html' %}
