@@ -1,0 +1,16 @@
+.upvote {
+ width: 8vw;   
+ min-width: 50px;
+}
+.sname {
+    width: 50vw;
+}
+.votes {
+    width: 10vw;
+}
+.upvote .needlogin {
+    display: none;
+}
+#all li {
+    width: 98vw;
+}

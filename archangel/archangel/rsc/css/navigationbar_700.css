@@ -1,0 +1,55 @@
+ul.navbar {
+    height: unset;
+}
+
+li.navbar {
+    height: unset;
+}
+
+.dropdown-content.navbar {
+    right: 8px;
+}
+
+.navbar.dropdown-content a {
+    text-align: left;
+}
+
+/* Mobile Menu */
+ul.mobile-menu {
+    text-align: left;
+    position: inline-flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.mobile-menu li a img {
+    border-radius: 50%;
+    height: 3vh;
+    width: 3vh;
+    object-fit: cover;
+    margin: 3px;
+}
+
+ul.mobile-menu li {
+    padding: 3vh 4vw;
+    text-decoration: none;
+    text-align: middle;
+    font-size: medium;
+    display: inline-block;
+}
+#accountdropdownmenu {
+    right: 1%;
+}
+
+/* Hide Desktop Menu */
+#navbar-pc {
+    display: none;
+}
+#navbar-mobile {
+    display: block;
+}
+.onlyBigScreen {
+    display: none;
+}

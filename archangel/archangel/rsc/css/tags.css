@@ -1,0 +1,108 @@
+.tag {
+    list-style: none;
+    float: left;
+    margin-right: 10px;
+    border-radius: 15px;
+    border-color: var(--accent-color-2);
+    border-style: solid;
+    border-width: 3px;
+    padding: 5px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    margin-top: 4px;
+    /*background-color: var(--overlay-dark-low);*/
+}
+.tag:hover {
+    border-color: var(--accent-color-2-lighter);
+}
+.tagName {
+    list-style: none;
+    float: left;
+    margin-right: 10px;
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: transparent;
+    padding: 5px;
+    width: 65px;
+}
+.tag a {
+    text-decoration: none;
+}
+
+.logoButton {
+    width: 25vw;
+    height: 5vh;
+}
+
+.tagWord {
+    list-style: none;
+    float: left;
+    border-radius: 15px;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 3px;
+    padding: 5px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    margin-top: 4px;
+    /*background-color: var(--overlay-dark-low);*/
+}
+
+/* Hover Notes */
+.genretag {
+    background-color: var(--accent-color-2);
+    color: var(--text-color);
+    list-style: none;
+    float: left;
+    margin-right: 10px;
+    border-radius: 15px;
+    border-width: 3px;
+    padding: 5px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    margin-top: 4px;
+    text-decoration: none;
+}
+.genretag:hover {
+    color: var(--text-color-darker);
+}
+/*
+# How to make hovernote
+<div class="hentry">
+    <!-- visible content -->
+    <div class="hovernote">
+        <!-- Hover Content -->
+        <div class="hovernotecontent">
+            <!-- Content e.g. tags Name etc -->
+        </div>
+    </div>
+</div>
+
+*/
+
+.hovernote {
+    position: absolute;
+    width: 570px;
+}
+.hovernotecontent {
+    background-color: var(--background-color-2);
+    display: none;
+    opacity: 0;
+    border-radius: 4px;
+    z-index: 1;
+    padding: 16px 32px;
+    width: 300px;
+    float: right;
+}
+.hovernotecontent > h4 {
+    padding-bottom: 8px;
+    font-weight: 400;
+}
+.hentry:hover > .hovernote .hovernotecontent {
+    display: block;
+    opacity: 0.95;
+}
